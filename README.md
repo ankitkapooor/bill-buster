@@ -21,7 +21,7 @@ Open http://localhost:8001. Requires Node.js 22 or later. `npm run build` produc
 4. Expand the evidence, price context and coverage table.
 5. Click **Prepare my inquiry**, edit the letter, and download PDF or text. The phone checklist is included.
 
-The sample charges are invented. References are real, extracted from the supplied source pack. Checks run deterministically each time; no cached analysis is presented. PDF extraction supports the sample’s pipe-separated text layout; scans and arbitrary bill layouts are unsupported. Selecting the built-in sample is visibly labeled as a fixture, not a PDF-extraction claim.
+The sample charges are invented. References are real, extracted from the supplied source pack. Checks run deterministically each time; no cached analysis is presented. PDF extraction supports the sample’s pipe-separated text layout and the visible headed statement tables in the 20-bill bank; scans and arbitrary bill layouts are unsupported. Selecting the built-in sample is visibly labeled as a fixture, not a PDF-extraction claim.
 
 ## Scope and behavior
 
@@ -55,7 +55,7 @@ npm run check
 npm run build
 ```
 
-The 15 tests cover ten PDF-to-packet runs, clean bills, repeats, provider separation, all MUE indicators, quarter boundaries, exact plan matching, ambiguous prices, missing fields, input rejection and output citations. They do not establish the PRD’s independent 30-bill/coder evaluation or real-world accuracy.
+The 35 tests include 20 statement-bank PDF extraction/answer-key tests and the original 15 tests: ten PDF-to-packet runs, clean bills, repeats, provider separation, MUE indicator logic, quarter boundaries, exact plan matching, ambiguous prices, missing fields, input rejection and output citations. They do not establish the PRD’s independent 30-bill/coder evaluation or real-world accuracy.
 
 ## Deployment
 
@@ -66,3 +66,21 @@ npm run deploy
 `wrangler.jsonc` binds the static assets to `billbuster.ankitkapoor.me` on the user’s Cloudflare account. Wrangler manages the custom domain and HTTPS. No Railway service or paid compute plan is needed for the browser-only application. The Railway project-creation attempt was rejected because the account’s trial expired; no Railway project was created.
 
 The only dependencies at runtime are bundled browser libraries: Mozilla PDF.js via unpdf and pdf-lib. Cloudflare serves the assets. No external fonts, analytics, API calls or persistent browser storage are used. Content security headers are in `scripts/build.mjs`.
+
+## 20-bill bank
+
+Browse https://billbuster.ankitkapoor.me/test-bills/ or open `public/test-bills/` locally. The ZIP contains 20 realistic-looking, clearly labeled synthetic statements and separate CSV/JSON answer keys. PDFs contain visible statement tables, not hidden extraction data. Patient identity/account fields are not imported into the tool.
+
+Cases BB-01–06 have no planted duplicate/MUE findings; BB-07–14 contain planted questions; BB-15–20 exercise modifiers, date/provider separation, missing values, quarter boundaries and a known PTP coverage gap. BB-20's 80053/80048 pair is active in the supplied Q3 hospital PTP table but is **not assessed by the current engine**. No result in this bank implies comprehensive coding clearance.
+
+`fixtures/bill-bank/cases.json` holds authored expectations, cross-checked against original source CSV/TXT records. `tests/bill-bank.test.mjs` compares every extracted field, all three per-line checks and packet generation against that key. `public/test-bills/verification.json` records the contract checks; it is not an accuracy study. The bank uses actual indicator-3 source records; indicator-1/2 logic is covered only by the separate unit tests.
+
+To recreate the PDFs, install ReportLab in a Python environment and run:
+
+```sh
+python3 scripts/create_bill_bank.py /absolute/path/to/bill-buster-public-sources
+npm test
+npm run build
+```
+
+The standalone archive is also written to `output/pdf/bill-bank/bill-buster-20-bills.zip`. No Python dependencies are needed to run the website, build existing assets, or execute its JavaScript tests.

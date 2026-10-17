@@ -1,0 +1,1525 @@
+{
+  "version": "1.0",
+  "created": "2026-10-17",
+  "scope": "Keck outpatient, Q3 2026, synthetic bills",
+  "limitations": "Developer-authored regression bank, not held-out or coder-validated. PTP case BB-20 documents an unsupported capability; no clinical correctness or real-world accuracy claim.",
+  "original_source_provenance": {
+    "mue": {
+      "file": "cms/mue/2026-q3/medicare-ncci-2026-q3-facility-outpatient-hospital-services-mue-table/MCR_MUE_OutpatientHospitalServices_Eff_07-01-2026.csv",
+      "sha256": "db6341c5576b132534a89378a8ce6f32d7f7108862250e5b076974c8d720be1b",
+      "records": {
+        "36415": 4042,
+        "70450": 7025,
+        "71046": 7060,
+        "80048": 7654,
+        "80053": 7657,
+        "84484": 8506,
+        "85025": 8545,
+        "93005": 9732,
+        "96360": 10171,
+        "96361": 10172,
+        "96374": 10182,
+        "99284": 10434,
+        "J1885": 12954,
+        "J2405": 13031,
+        "J7030": 13192
+      }
+    },
+    "ptp": {
+      "file": "cms/ptp/2026-q3/hospital_outpatient/medicare-ncci-2026q3-hospital-ptp-edits-ccioph-v322r0-f4/ccioph-v322r0-f4.txt",
+      "sha256": "c8eb6bf214213e529ea44c46e49f2ecf97d6a2f35001685a91cc8f66e08f25ac",
+      "source_line": 213077,
+      "values": [
+        "80053",
+        "80048",
+        "",
+        "20000701",
+        "*",
+        "0",
+        "CPT Manual or CMS manual coding instruction"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "BB-01",
+      "title": "Routine emergency evaluation",
+      "category": "clean",
+      "patient": "Morgan Ellis",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "99284",
+            "description": "Emergency department visit",
+            "units": 1,
+            "amount": 1850,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 48,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "93005",
+            "description": "ECG tracing",
+            "units": 1,
+            "amount": 165,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "",
+      "ptp": null,
+      "pdf": "bills/BB-01.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 4,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 5,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 5,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-02",
+      "title": "Imaging and blood collection",
+      "category": "clean",
+      "patient": "Avery Chen",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "70450",
+            "description": "Head CT without contrast",
+            "units": 1,
+            "amount": 1640,
+            "date": "2026-07-08",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "71046",
+            "description": "Chest X-ray, two views",
+            "units": 1,
+            "amount": 330,
+            "date": "2026-07-08",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 52,
+            "date": "2026-07-08",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "",
+      "ptp": null,
+      "pdf": "bills/BB-02.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 3,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 3,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-03",
+      "title": "Hydration visit",
+      "category": "clean",
+      "patient": "Jordan Patel",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "96360",
+            "description": "IV hydration, initial service",
+            "units": 1,
+            "amount": 640,
+            "date": "2026-08-12",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "96361",
+            "description": "IV hydration, additional hour",
+            "units": 1,
+            "amount": 160,
+            "date": "2026-08-12",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "J7030",
+            "description": "IV saline supply, 1,000 mL",
+            "units": 1,
+            "amount": 125,
+            "date": "2026-08-12",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "",
+      "ptp": null,
+      "pdf": "bills/BB-03.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 24,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 20,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-04",
+      "title": "Serial cardiac testing",
+      "category": "clean",
+      "patient": "Casey Brooks",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "84484",
+            "description": "Cardiac laboratory test",
+            "units": 2,
+            "amount": 310,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "93005",
+            "description": "ECG tracing",
+            "units": 1,
+            "amount": 180,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80048",
+            "description": "Basic metabolic panel",
+            "units": 1,
+            "amount": 125,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 210,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Two units on one cardiac-test line remain below the published four-unit limit.",
+      "ptp": null,
+      "pdf": "bills/BB-04.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 5,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 4,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-05",
+      "title": "Repeat laboratory test with modifier 91",
+      "category": "clean",
+      "patient": "Taylor Rivera",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-08-03",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-08-03",
+            "modifiers": "91",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80048",
+            "description": "Basic metabolic panel",
+            "units": 1,
+            "amount": 125,
+            "date": "2026-08-03",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Do not flag a duplicate; the repeat-test modifier is present. Modified price matching is outside the prototype.",
+      "ptp": null,
+      "pdf": "bills/BB-05.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-06",
+      "title": "Commercial plan price matching",
+      "category": "clean",
+      "patient": "Riley Adams",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Unitedhealthcare",
+        "plan": "Navigate/Select & Core Exchange",
+        "lines": [
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "84484",
+            "description": "Cardiac laboratory test",
+            "units": 1,
+            "amount": 155,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 48,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Coding findings are Medicare-reference questions only. Expect the exact-plan negotiated CBC rate of $12.83; do not call the billed-price difference an overcharge.",
+      "ptp": null,
+      "pdf": "bills/BB-06.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-07",
+      "title": "Repeated blood-count charge",
+      "category": "planted",
+      "patient": "Cameron Lee",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80048",
+            "description": "Basic metabolic panel",
+            "units": 1,
+            "amount": 125,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "duplicate",
+          "lines": [
+            1,
+            3
+          ]
+        }
+      ],
+      "note": "Only the repeated blood-count line should raise a duplicate question; day units are 2, below the MUE of 4.",
+      "ptp": null,
+      "pdf": "bills/BB-07.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "question",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-08",
+      "title": "Repeated blood-collection charge",
+      "category": "planted",
+      "patient": "Quinn Parker",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 48,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 48,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "duplicate",
+          "lines": [
+            1,
+            2
+          ]
+        }
+      ],
+      "note": "Two blood-collection units equal the published limit of 2; this is a duplicate question only.",
+      "ptp": null,
+      "pdf": "bills/BB-08.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "question",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-09",
+      "title": "Repeated radiology charge",
+      "category": "planted",
+      "patient": "Alex Bennett",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "71046",
+            "description": "Chest X-ray, two views",
+            "units": 1,
+            "amount": 330,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "99284",
+            "description": "Emergency department visit",
+            "units": 1,
+            "amount": 1850,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "71046",
+            "description": "Chest X-ray, two views",
+            "units": 1,
+            "amount": 330,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "duplicate",
+          "lines": [
+            1,
+            3
+          ]
+        }
+      ],
+      "note": "Two chest-imaging units remain below the published limit of 3.",
+      "ptp": null,
+      "pdf": "bills/BB-09.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 3,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 3,
+          "duplicate": "question",
+          "units": "clear",
+          "mue_limit": 3,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-10",
+      "title": "Metabolic-panel units above the limit",
+      "category": "planted",
+      "patient": "Jamie Nguyen",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 2,
+            "amount": 480,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 48,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "units",
+          "lines": [
+            1
+          ]
+        }
+      ],
+      "note": "80053: 2 units versus MUE 1, MAI 3. Ask about documentation or exceptions; do not determine that the charge is wrong.",
+      "ptp": null,
+      "pdf": "bills/BB-10.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "question",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-11",
+      "title": "Medication-administration units above the limit",
+      "category": "planted",
+      "patient": "Drew Sullivan",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "96374",
+            "description": "IV medication administration",
+            "units": 2,
+            "amount": 1180,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "J2405",
+            "description": "Antiemetic supply, per unit",
+            "units": 4,
+            "amount": 76,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "J1885",
+            "description": "Pain-relief supply, per unit",
+            "units": 2,
+            "amount": 44,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "units",
+          "lines": [
+            1
+          ]
+        }
+      ],
+      "note": "96374: 2 units versus MUE 1, MAI 3. Drug supply units are separate code-specific billing units, not a dose comparison.",
+      "ptp": null,
+      "pdf": "bills/BB-11.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "question",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 64,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 8,
+          "mue_indicator": 3,
+          "price": "unable"
+        }
+      ]
+    },
+    {
+      "id": "BB-12",
+      "title": "Units split over two differently priced lines",
+      "category": "planted",
+      "patient": "Reese Carter",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 120,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 1,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 135,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "units",
+          "lines": [
+            1,
+            3
+          ]
+        }
+      ],
+      "note": "Aggregate same-provider, same-date 80053 units to 2. Different amounts mean no duplicate flag.",
+      "ptp": null,
+      "pdf": "bills/BB-12.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "question",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "question",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-13",
+      "title": "Blood-count units above the limit",
+      "category": "planted",
+      "patient": "Skyler Ross",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": 5,
+            "amount": 1060,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "36415",
+            "description": "Routine blood collection",
+            "units": 1,
+            "amount": 48,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "units",
+          "lines": [
+            1
+          ]
+        }
+      ],
+      "note": "85025: 5 units versus MUE 4, MAI 3.",
+      "ptp": null,
+      "pdf": "bills/BB-13.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "question",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-14",
+      "title": "Duplicate and day-unit questions together",
+      "category": "planted",
+      "patient": "Emerson Bell",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "99284",
+            "description": "Emergency department visit",
+            "units": 1,
+            "amount": 1850,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [
+        {
+          "kind": "duplicate",
+          "lines": [
+            1,
+            2
+          ]
+        },
+        {
+          "kind": "units",
+          "lines": [
+            1,
+            2
+          ]
+        }
+      ],
+      "note": "Show two separate questions. Do not add the flagged amounts together or call the result savings.",
+      "ptp": null,
+      "pdf": "bills/BB-14.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "question",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "question",
+          "units": "question",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "unable"
+        }
+      ]
+    },
+    {
+      "id": "BB-15",
+      "title": "Repeat imaging with modifier 76",
+      "category": "edge",
+      "patient": "Finley Davis",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "71046",
+            "description": "Chest X-ray, two views",
+            "units": 1,
+            "amount": 330,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "71046",
+            "description": "Chest X-ray, two views",
+            "units": 1,
+            "amount": 330,
+            "date": "2026-09-14",
+            "modifiers": "76",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "99284",
+            "description": "Emergency department visit",
+            "units": 1,
+            "amount": 1850,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Repeat modifier prevents a duplicate question; total 2 remains below MUE 3. Modified price matching stays unable to assess.",
+      "ptp": null,
+      "pdf": "bills/BB-15.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 3,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 3,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "unable"
+        }
+      ]
+    },
+    {
+      "id": "BB-16",
+      "title": "Same code on different dates",
+      "category": "edge",
+      "patient": "Rowan Kim",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-29",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-30",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Each date has one unit; never aggregate across dates or flag these as duplicates.",
+      "ptp": null,
+      "pdf": "bills/BB-16.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-17",
+      "title": "Quarter boundary",
+      "category": "edge",
+      "patient": "Peyton Shah",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-30",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-10-01",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "The October line needs Q4 references. Its unit and price checks must be unable to assess; Q3 must not be carried forward.",
+      "ptp": null,
+      "pdf": "bills/BB-17.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "unable",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "unable"
+        }
+      ]
+    },
+    {
+      "id": "BB-18",
+      "title": "Same code from separate billing providers",
+      "category": "edge",
+      "patient": "Sage Wilson",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-B"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Separate provider identifiers: no duplicate and no combined day-unit MUE question.",
+      "ptp": null,
+      "pdf": "bills/BB-18.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    },
+    {
+      "id": "BB-19",
+      "title": "Missing and unsupported fields",
+      "category": "edge",
+      "patient": "Hayden Lewis",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "",
+            "description": "Unspecified laboratory service",
+            "units": 1,
+            "amount": 90,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "85025",
+            "description": "Blood count with differential",
+            "units": null,
+            "amount": 212,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "J7030",
+            "description": "IV saline supply, 1,000 mL",
+            "units": 1,
+            "amount": null,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "99999",
+            "description": "Unmapped test service",
+            "units": 1,
+            "amount": 55,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Preserve the missing code, missing units and missing charge. Unknown code 99999 is outside the subset. Do not convert blanks to zero or present a complete statement total.",
+      "ptp": null,
+      "pdf": "bills/BB-19.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "unable",
+          "units": "unable",
+          "mue_limit": null,
+          "mue_indicator": null,
+          "price": "unable"
+        },
+        {
+          "line": 2,
+          "duplicate": "unable",
+          "units": "unable",
+          "mue_limit": 4,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 3,
+          "duplicate": "unable",
+          "units": "clear",
+          "mue_limit": 20,
+          "mue_indicator": 3,
+          "price": "unable"
+        },
+        {
+          "line": 4,
+          "duplicate": "clear",
+          "units": "unable",
+          "mue_limit": null,
+          "mue_indicator": null,
+          "price": "unable"
+        }
+      ]
+    },
+    {
+      "id": "BB-20",
+      "title": "NCCI PTP coverage gap",
+      "category": "edge",
+      "patient": "Blair Cooper",
+      "bill": {
+        "hospital": "Keck Hospital of USC",
+        "setting": "outpatient",
+        "payer": "Medicare",
+        "plan": "",
+        "lines": [
+          {
+            "code": "80053",
+            "description": "Comprehensive metabolic panel",
+            "units": 1,
+            "amount": 240,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          },
+          {
+            "code": "80048",
+            "description": "Basic metabolic panel",
+            "units": 1,
+            "amount": 125,
+            "date": "2026-09-14",
+            "modifiers": "",
+            "provider": "FAC-A"
+          }
+        ]
+      },
+      "expected_findings": [],
+      "note": "Each MUE is within its limit, but the active hospital NCCI PTP pair 80053/80048 requires a code-pair question. The current app cannot assess PTP and will not find it. This is a documented missing capability, not a clean bill.",
+      "ptp": {
+        "column1": "80053",
+        "column2": "80048",
+        "modifier_indicator": 0,
+        "effective": "2000-07-01",
+        "deletion": null,
+        "expected": "PTP review required; unsupported by the current app",
+        "source": "ccioph-v322r0-f4.txt",
+        "source_line": 213077
+      },
+      "pdf": "bills/BB-20.pdf",
+      "expected_line_checks": [
+        {
+          "line": 1,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 1,
+          "mue_indicator": 3,
+          "price": "context"
+        },
+        {
+          "line": 2,
+          "duplicate": "clear",
+          "units": "clear",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "context"
+        }
+      ]
+    }
+  ]
+}

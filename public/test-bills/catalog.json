@@ -1,0 +1,122 @@
+[
+  {
+    "id": "BB-01",
+    "pdf": "bills/BB-01.pdf",
+    "lines": 5,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-02",
+    "pdf": "bills/BB-02.pdf",
+    "lines": 3,
+    "date": "2026-07-08"
+  },
+  {
+    "id": "BB-03",
+    "pdf": "bills/BB-03.pdf",
+    "lines": 3,
+    "date": "2026-08-12"
+  },
+  {
+    "id": "BB-04",
+    "pdf": "bills/BB-04.pdf",
+    "lines": 4,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-05",
+    "pdf": "bills/BB-05.pdf",
+    "lines": 3,
+    "date": "2026-08-03"
+  },
+  {
+    "id": "BB-06",
+    "pdf": "bills/BB-06.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-07",
+    "pdf": "bills/BB-07.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-08",
+    "pdf": "bills/BB-08.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-09",
+    "pdf": "bills/BB-09.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-10",
+    "pdf": "bills/BB-10.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-11",
+    "pdf": "bills/BB-11.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-12",
+    "pdf": "bills/BB-12.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-13",
+    "pdf": "bills/BB-13.pdf",
+    "lines": 2,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-14",
+    "pdf": "bills/BB-14.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-15",
+    "pdf": "bills/BB-15.pdf",
+    "lines": 3,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-16",
+    "pdf": "bills/BB-16.pdf",
+    "lines": 2,
+    "date": "2026-09-29"
+  },
+  {
+    "id": "BB-17",
+    "pdf": "bills/BB-17.pdf",
+    "lines": 2,
+    "date": "2026-09-30"
+  },
+  {
+    "id": "BB-18",
+    "pdf": "bills/BB-18.pdf",
+    "lines": 2,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-19",
+    "pdf": "bills/BB-19.pdf",
+    "lines": 4,
+    "date": "2026-09-14"
+  },
+  {
+    "id": "BB-20",
+    "pdf": "bills/BB-20.pdf",
+    "lines": 2,
+    "date": "2026-09-14"
+  }
+]
