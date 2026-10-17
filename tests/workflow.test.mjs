@@ -13,12 +13,13 @@ test('ten complete synthetic PDF-to-packet runs',async()=>{
     const extracted=await extractPDF(source.slice());
     assert.deepEqual(validate(extracted.bill),validate(SAMPLE));
     const result=analyze(extracted.bill),draft=packet(result);
-    assert.deepEqual(result.findings.map(f=>[f.kind,f.lines]),[['duplicate',[2,4]],['units',[5]]]);
-    assert.equal(result.total,2562);
+    assert.deepEqual(result.findings.map(f=>[f.kind,f.lines]),[['duplicate',[2,4]],['units',[5]],['bundling',[5,6]]]);
+    assert.equal(result.total,2687);
     assert.match(draft.letter,/\[BILL-2-4\]/);assert.match(draft.letter,/\[MUE-Q3-2026-80053\]/);
     const pdf=await pdfDocument('Your billing inquiry packet',[draft.validation,...draft.letter.split('\n\n'),'Phone checklist',...draft.checklist]);
     const content=await extractText(pdf.slice(),{mergePages:true});
     assert.match(content.text,/MUE-Q3-2026-80053/);assert.match(content.text,/Phone checklist/);
+    assert.match(content.text,/PTP-Q3-2026-80053-80048/);
     if(i===0){await mkdir('output',{recursive:true});await writeFile('output/synthetic-bill.pdf',source);await writeFile('output/inquiry-packet.pdf',pdf);}
   }
 });
@@ -28,7 +29,7 @@ test('independently recorded CMS and Keck source values',()=>{
   const row=REFERENCES.prices['85025'].find(r=>r.record===94732);assert.equal(row.gross,84);assert.equal(row.cash,84);
 });
 test('clean bill produces no coding questions',()=>{
-  const b=sample();b.lines.splice(3,1);b.lines.at(-1).units=1;assert.deepEqual(analyze(b).findings,[]);
+  const b=sample();b.lines=b.lines.filter((l,i)=>i!==3&&l.code!=='80048');b.lines.find(l=>l.code==='80053').units=1;assert.deepEqual(analyze(b).findings,[]);
 });
 test('repeat modifiers prevent duplicate questions',()=>{
   for(const m of ['76','77','91']){const b=sample();b.lines[3].modifiers=m;assert.equal(questions(b,'duplicate').length,0);}

@@ -1,8 +1,8 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "created": "2026-10-17",
   "scope": "Keck outpatient, Q3 2026, synthetic bills",
-  "limitations": "Developer-authored regression bank, not held-out or coder-validated. PTP case BB-20 documents an unsupported capability; no clinical correctness or real-world accuracy claim.",
+  "limitations": "Developer-authored regression bank, not held-out or coder-validated. PTP cases test bundling and documentation review within the 20-code Q3 hospital subset; no clinical correctness or real-world accuracy claim.",
   "original_source_provenance": {
     "mue": {
       "file": "cms/mue/2026-q3/medicare-ncci-2026-q3-facility-outpatient-hospital-services-mue-table/MCR_MUE_OutpatientHospitalServices_Eff_07-01-2026.csv",
@@ -28,15 +28,31 @@
     "ptp": {
       "file": "cms/ptp/2026-q3/hospital_outpatient/medicare-ncci-2026q3-hospital-ptp-edits-ccioph-v322r0-f4/ccioph-v322r0-f4.txt",
       "sha256": "c8eb6bf214213e529ea44c46e49f2ecf97d6a2f35001685a91cc8f66e08f25ac",
-      "source_line": 213077,
-      "values": [
-        "80053",
-        "80048",
-        "",
-        "20000701",
-        "*",
-        "0",
-        "CPT Manual or CMS manual coding instruction"
+      "records": [
+        {
+          "source_line": 213077,
+          "values": [
+            "80053",
+            "80048",
+            "",
+            "20000701",
+            "*",
+            "0",
+            "CPT Manual or CMS manual coding instruction"
+          ]
+        },
+        {
+          "source_line": 355092,
+          "values": [
+            "96360",
+            "96374",
+            "",
+            "20090101",
+            "*",
+            "1",
+            "Misuse of Column Two code with Column One code"
+          ]
+        }
       ]
     }
   },
@@ -103,6 +119,7 @@
       "note": "",
       "ptp": null,
       "pdf": "bills/BB-01.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -110,7 +127,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -118,7 +136,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -126,7 +145,8 @@
           "units": "clear",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 4,
@@ -134,7 +154,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 5,
@@ -142,7 +163,8 @@
           "units": "clear",
           "mue_limit": 5,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -190,6 +212,7 @@
       "note": "",
       "ptp": null,
       "pdf": "bills/BB-02.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -197,7 +220,8 @@
           "units": "clear",
           "mue_limit": 3,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -205,7 +229,8 @@
           "units": "clear",
           "mue_limit": 3,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -213,7 +238,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -261,6 +287,7 @@
       "note": "",
       "ptp": null,
       "pdf": "bills/BB-03.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -268,7 +295,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -276,7 +304,8 @@
           "units": "clear",
           "mue_limit": 24,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -284,7 +313,8 @@
           "units": "clear",
           "mue_limit": 20,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -341,6 +371,7 @@
       "note": "Two units on one cardiac-test line remain below the published four-unit limit.",
       "ptp": null,
       "pdf": "bills/BB-04.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -348,7 +379,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -356,7 +388,8 @@
           "units": "clear",
           "mue_limit": 5,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -364,7 +397,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 4,
@@ -372,7 +406,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -420,6 +455,7 @@
       "note": "Do not flag a duplicate; the repeat-test modifier is present. Modified price matching is outside the prototype.",
       "ptp": null,
       "pdf": "bills/BB-05.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -427,7 +463,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -435,7 +472,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -443,7 +481,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -491,6 +530,7 @@
       "note": "Coding findings are Medicare-reference questions only. Expect the exact-plan negotiated CBC rate of $12.83; do not call the billed-price difference an overcharge.",
       "ptp": null,
       "pdf": "bills/BB-06.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -498,7 +538,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -506,7 +547,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -514,7 +556,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -570,6 +613,7 @@
       "note": "Only the repeated blood-count line should raise a duplicate question; day units are 2, below the MUE of 4.",
       "ptp": null,
       "pdf": "bills/BB-07.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -577,7 +621,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -585,7 +630,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -593,7 +639,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -649,6 +696,7 @@
       "note": "Two blood-collection units equal the published limit of 2; this is a duplicate question only.",
       "ptp": null,
       "pdf": "bills/BB-08.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -656,7 +704,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -664,7 +713,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -672,13 +722,14 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
     {
       "id": "BB-09",
-      "title": "Repeated radiology charge",
+      "title": "Potential bundling without an exception modifier",
       "category": "planted",
       "patient": "Alex Bennett",
       "bill": {
@@ -688,28 +739,28 @@
         "plan": "",
         "lines": [
           {
-            "code": "71046",
-            "description": "Chest X-ray, two views",
+            "code": "96360",
+            "description": "IV hydration, initial service",
             "units": 1,
-            "amount": 330,
+            "amount": 640,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-A"
           },
           {
-            "code": "99284",
-            "description": "Emergency department visit",
+            "code": "96374",
+            "description": "IV medication administration",
             "units": 1,
-            "amount": 1850,
+            "amount": 590,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-A"
           },
           {
-            "code": "71046",
-            "description": "Chest X-ray, two views",
+            "code": "J7030",
+            "description": "IV saline supply, 1,000 mL",
             "units": 1,
-            "amount": 330,
+            "amount": 125,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-A"
@@ -718,40 +769,53 @@
       },
       "expected_findings": [
         {
-          "kind": "duplicate",
+          "kind": "bundling",
           "lines": [
             1,
-            3
+            2
           ]
         }
       ],
-      "note": "Two chest-imaging units remain below the published limit of 3.",
-      "ptp": null,
+      "note": "Active hospital PTP pair 96360/96374, modifier indicator 1. No associated exception modifier is present; ask why the services were billed separately.",
+      "ptp": {
+        "column1": "96360",
+        "column2": "96374",
+        "modifier_indicator": 1,
+        "effective": "2009-01-01",
+        "deletion": null,
+        "expected": "bundling question",
+        "source": "ccioph-v322r0-f4.txt",
+        "source_line": 355092
+      },
       "pdf": "bills/BB-09.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 3,
+          "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "question"
         },
         {
           "line": 2,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 2,
+          "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "context",
+          "ptp": "question"
         },
         {
           "line": 3,
-          "duplicate": "question",
+          "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 3,
+          "mue_limit": 20,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -806,6 +870,7 @@
       "note": "80053: 2 units versus MUE 1, MAI 3. Ask about documentation or exceptions; do not determine that the charge is wrong.",
       "ptp": null,
       "pdf": "bills/BB-10.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -813,7 +878,8 @@
           "units": "question",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -821,7 +887,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -829,7 +896,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -884,6 +952,7 @@
       "note": "96374: 2 units versus MUE 1, MAI 3. Drug supply units are separate code-specific billing units, not a dose comparison.",
       "ptp": null,
       "pdf": "bills/BB-11.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -891,7 +960,8 @@
           "units": "question",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -899,7 +969,8 @@
           "units": "clear",
           "mue_limit": 64,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -907,7 +978,8 @@
           "units": "clear",
           "mue_limit": 8,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "clear"
         }
       ]
     },
@@ -963,6 +1035,7 @@
       "note": "Aggregate same-provider, same-date 80053 units to 2. Different amounts mean no duplicate flag.",
       "ptp": null,
       "pdf": "bills/BB-12.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -970,7 +1043,8 @@
           "units": "question",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -978,7 +1052,8 @@
           "units": "clear",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -986,7 +1061,8 @@
           "units": "question",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -1032,6 +1108,7 @@
       "note": "85025: 5 units versus MUE 4, MAI 3.",
       "ptp": null,
       "pdf": "bills/BB-13.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -1039,7 +1116,8 @@
           "units": "question",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -1047,7 +1125,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -1110,6 +1189,7 @@
       "note": "Show two separate questions. Do not add the flagged amounts together or call the result savings.",
       "ptp": null,
       "pdf": "bills/BB-14.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -1117,7 +1197,8 @@
           "units": "question",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -1125,7 +1206,8 @@
           "units": "question",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 3,
@@ -1133,13 +1215,14 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "clear"
         }
       ]
     },
     {
       "id": "BB-15",
-      "title": "Repeat imaging with modifier 76",
+      "title": "Possible PTP exception with modifier 59",
       "category": "edge",
       "patient": "Finley Davis",
       "bill": {
@@ -1149,28 +1232,28 @@
         "plan": "",
         "lines": [
           {
-            "code": "71046",
-            "description": "Chest X-ray, two views",
+            "code": "96360",
+            "description": "IV hydration, initial service",
             "units": 1,
-            "amount": 330,
+            "amount": 640,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-A"
           },
           {
-            "code": "71046",
-            "description": "Chest X-ray, two views",
+            "code": "96374",
+            "description": "IV medication administration",
             "units": 1,
-            "amount": 330,
+            "amount": 590,
             "date": "2026-09-14",
-            "modifiers": "76",
+            "modifiers": "59",
             "provider": "FAC-A"
           },
           {
-            "code": "99284",
-            "description": "Emergency department visit",
+            "code": "J7030",
+            "description": "IV saline supply, 1,000 mL",
             "units": 1,
-            "amount": 1850,
+            "amount": 125,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-A"
@@ -1178,39 +1261,60 @@
         ]
       },
       "expected_findings": [],
-      "note": "Repeat modifier prevents a duplicate question; total 2 remains below MUE 3. Modified price matching stays unable to assess.",
-      "ptp": null,
+      "note": "Same active 96360/96374 pair as BB-09. Modifier 59 routes to documentation review, not a bundling finding or automatic clearance. Modified price matching stays unable to assess.",
+      "ptp": {
+        "column1": "96360",
+        "column2": "96374",
+        "modifier_indicator": 1,
+        "effective": "2009-01-01",
+        "deletion": null,
+        "expected": "modifier documentation review",
+        "source": "ccioph-v322r0-f4.txt",
+        "source_line": 355092
+      },
+      "expected_modifier_reviews": [
+        {
+          "kind": "bundling",
+          "lines": [
+            1,
+            2
+          ]
+        }
+      ],
       "pdf": "bills/BB-15.pdf",
       "expected_line_checks": [
         {
           "line": 1,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 3,
+          "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "review"
         },
         {
           "line": 2,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 3,
+          "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "review"
         },
         {
           "line": 3,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 2,
+          "mue_limit": 20,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
     {
       "id": "BB-16",
-      "title": "Same code on different dates",
+      "title": "PTP pair on different dates",
       "category": "edge",
       "patient": "Rowan Kim",
       "bill": {
@@ -1220,19 +1324,19 @@
         "plan": "",
         "lines": [
           {
-            "code": "80053",
-            "description": "Comprehensive metabolic panel",
+            "code": "96360",
+            "description": "IV hydration, initial service",
             "units": 1,
-            "amount": 240,
+            "amount": 640,
             "date": "2026-09-29",
             "modifiers": "",
             "provider": "FAC-A"
           },
           {
-            "code": "80053",
-            "description": "Comprehensive metabolic panel",
+            "code": "96374",
+            "description": "IV medication administration",
             "units": 1,
-            "amount": 240,
+            "amount": 590,
             "date": "2026-09-30",
             "modifiers": "",
             "provider": "FAC-A"
@@ -1240,17 +1344,19 @@
         ]
       },
       "expected_findings": [],
-      "note": "Each date has one unit; never aggregate across dates or flag these as duplicates.",
+      "note": "The 96360/96374 pair is not a bundling question across different dates. Each MUE is within its same-date limit.",
       "ptp": null,
       "pdf": "bills/BB-16.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 1,
+          "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -1258,7 +1364,8 @@
           "units": "clear",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -1290,13 +1397,23 @@
             "date": "2026-10-01",
             "modifiers": "",
             "provider": "FAC-A"
+          },
+          {
+            "code": "80048",
+            "description": "Basic metabolic panel",
+            "units": 1,
+            "amount": 125,
+            "date": "2026-10-01",
+            "modifiers": "",
+            "provider": "FAC-A"
           }
         ]
       },
       "expected_findings": [],
-      "note": "The October line needs Q4 references. Its unit and price checks must be unable to assess; Q3 must not be carried forward.",
+      "note": "The October 80053/80048 pair needs Q4 references. October unit, PTP and price checks must be unable to assess; Q3 must not be carried forward.",
       "ptp": null,
       "pdf": "bills/BB-17.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -1304,7 +1421,8 @@
           "units": "clear",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -1312,13 +1430,23 @@
           "units": "unable",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "unable"
+        },
+        {
+          "line": 3,
+          "duplicate": "clear",
+          "units": "unable",
+          "mue_limit": 2,
+          "mue_indicator": 3,
+          "price": "unable",
+          "ptp": "unable"
         }
       ]
     },
     {
       "id": "BB-18",
-      "title": "Same code from separate billing providers",
+      "title": "PTP pair from separate billing providers",
       "category": "edge",
       "patient": "Sage Wilson",
       "bill": {
@@ -1328,19 +1456,19 @@
         "plan": "",
         "lines": [
           {
-            "code": "80053",
-            "description": "Comprehensive metabolic panel",
+            "code": "96360",
+            "description": "IV hydration, initial service",
             "units": 1,
-            "amount": 240,
+            "amount": 640,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-A"
           },
           {
-            "code": "80053",
-            "description": "Comprehensive metabolic panel",
+            "code": "96374",
+            "description": "IV medication administration",
             "units": 1,
-            "amount": 240,
+            "amount": 590,
             "date": "2026-09-14",
             "modifiers": "",
             "provider": "FAC-B"
@@ -1348,17 +1476,19 @@
         ]
       },
       "expected_findings": [],
-      "note": "Separate provider identifiers: no duplicate and no combined day-unit MUE question.",
+      "note": "Do not raise a 96360/96374 PTP question across distinct billing providers. Each MUE is within its same-provider limit.",
       "ptp": null,
       "pdf": "bills/BB-18.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
           "duplicate": "clear",
           "units": "clear",
-          "mue_limit": 1,
+          "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         },
         {
           "line": 2,
@@ -1366,7 +1496,8 @@
           "units": "clear",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "clear"
         }
       ]
     },
@@ -1423,6 +1554,7 @@
       "note": "Preserve the missing code, missing units and missing charge. Unknown code 99999 is outside the subset. Do not convert blanks to zero or present a complete statement total.",
       "ptp": null,
       "pdf": "bills/BB-19.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -1430,7 +1562,8 @@
           "units": "unable",
           "mue_limit": null,
           "mue_indicator": null,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "unable"
         },
         {
           "line": 2,
@@ -1438,7 +1571,8 @@
           "units": "unable",
           "mue_limit": 4,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "unable"
         },
         {
           "line": 3,
@@ -1446,7 +1580,8 @@
           "units": "clear",
           "mue_limit": 20,
           "mue_indicator": 3,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "unable"
         },
         {
           "line": 4,
@@ -1454,14 +1589,15 @@
           "units": "unable",
           "mue_limit": null,
           "mue_indicator": null,
-          "price": "unable"
+          "price": "unable",
+          "ptp": "unable"
         }
       ]
     },
     {
       "id": "BB-20",
-      "title": "NCCI PTP coverage gap",
-      "category": "edge",
+      "title": "Bundled metabolic panels",
+      "category": "planted",
       "patient": "Blair Cooper",
       "bill": {
         "hospital": "Keck Hospital of USC",
@@ -1489,19 +1625,28 @@
           }
         ]
       },
-      "expected_findings": [],
-      "note": "Each MUE is within its limit, but the active hospital NCCI PTP pair 80053/80048 requires a code-pair question. The current app cannot assess PTP and will not find it. This is a documented missing capability, not a clean bill.",
+      "expected_findings": [
+        {
+          "kind": "bundling",
+          "lines": [
+            1,
+            2
+          ]
+        }
+      ],
+      "note": "Each MUE is within its limit, but active hospital NCCI PTP pair 80053/80048 raises a separate-billing question. Modifier indicator 0 does not permit a modifier bypass.",
       "ptp": {
         "column1": "80053",
         "column2": "80048",
         "modifier_indicator": 0,
         "effective": "2000-07-01",
         "deletion": null,
-        "expected": "PTP review required; unsupported by the current app",
+        "expected": "bundling question",
         "source": "ccioph-v322r0-f4.txt",
         "source_line": 213077
       },
       "pdf": "bills/BB-20.pdf",
+      "expected_modifier_reviews": [],
       "expected_line_checks": [
         {
           "line": 1,
@@ -1509,7 +1654,8 @@
           "units": "clear",
           "mue_limit": 1,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "question"
         },
         {
           "line": 2,
@@ -1517,7 +1663,8 @@
           "units": "clear",
           "mue_limit": 2,
           "mue_indicator": 3,
-          "price": "context"
+          "price": "context",
+          "ptp": "question"
         }
       ]
     }

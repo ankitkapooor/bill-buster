@@ -17,6 +17,26 @@ def prepare(source):
         for row_number, row in enumerate(csv.reader(stream), 1):
             if row[0] in CODES:
                 mue[row[0]] = dict(limit=int(row[1]), indicator=int(row[2][0]), rationale=row[3], row=row_number)
+    # Use every full hospital table part, never the quarterly changes-only files.
+    ptp_paths = sorted((source / 'cms/ptp/2026-q3/hospital_outpatient').rglob('*.txt'))
+    if len(ptp_paths) != 4 or {p.stem[-2:] for p in ptp_paths} != {'f1','f2','f3','f4'}:
+        raise ValueError('All four Q3 hospital PTP parts are required to establish subset coverage.')
+    ptp_records, ptp_files = [], []
+    def iso(value):
+        return None if value == '*' else f'{value[:4]}-{value[4:6]}-{value[6:]}'
+    for path in ptp_paths:
+        count = 0
+        with path.open(newline='') as stream:
+            for row_number, row in enumerate(csv.reader(stream, delimiter='\t'), 1):
+                if len(row) < 7 or len(row[0]) != 5 or len(row[1]) != 5 or not row[3].isdigit():
+                    continue
+                count += 1
+                if row[0] in CODES and row[1] in CODES:
+                    ptp_records.append(dict(column1=row[0], column2=row[1], effective=iso(row[3]), deletion=iso(row[4]),
+                        modifier_indicator=int(row[5]), rationale=row[6], file=path.name, row=row_number))
+        if not count:
+            raise ValueError(f'Empty or unreadable PTP table: {path}')
+        ptp_files.append(dict(file=str(path.relative_to(source)), sha256=hashlib.sha256(path.read_bytes()).hexdigest(), records=count))
     prices = {code: [] for code in CODES}
     with price_path.open(encoding='utf-8-sig', newline='') as stream:
         reader = csv.reader(stream)
@@ -40,14 +60,16 @@ def prepare(source):
                     payer=row['payer_name'], plan=row['plan_name'], negotiated=number('standard_charge|negotiated_dollar'),
                     algorithm=row['standard_charge|negotiated_algorithm'], methodology=row['standard_charge|methodology']))
     data = dict(hospital=metadata[0], price_date=metadata[1], quarter='2026 Q3', start='2026-07-01', end='2026-09-30',
-        codes=CODES, mue=mue, prices=prices, sources={
+        codes=CODES, mue=mue, ptp=dict(complete=True,codes=CODES,records=ptp_records), prices=prices, sources={
+            'ptp': dict(quarter='2026 Q3', setting='hospital outpatient', files=ptp_files,
+                url='https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-procedure-procedure-ptp-edits'),
             'mue': dict(file=str(mue_path.relative_to(source)), sha256=hashlib.sha256(mue_path.read_bytes()).hexdigest(),
                 url='https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-medically-unlikely-edits-mues'),
             'prices': dict(file=str(price_path.relative_to(source)), sha256=hashlib.sha256(price_path.read_bytes()).hexdigest(),
                 url='https://www.keckmedicine.org/hospital-pricing-information/'),
             'guidance': dict(url='https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-faq-library')})
     (ROOT / 'data/references.json').write_text(json.dumps(data, indent=2) + '\n')
-    print(f'Prepared {len(mue)} MUE records and {sum(map(len, prices.values()))} hospital price records.')
+    print(f'Prepared {len(mue)} MUE records, {len(ptp_records)} PTP records from all 4 parts, and {sum(map(len, prices.values()))} hospital price records.')
 
 if __name__ == '__main__':
     prepare(sys.argv[1])

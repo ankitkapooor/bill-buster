@@ -1,21 +1,21 @@
 bill_id,scenario,category,expected_coding_questions,expected_findings,ptp_coverage,review_note
-BB-01,Routine emergency evaluation,clean,0,,Not assessed by this prototype,
-BB-02,Imaging and blood collection,clean,0,,Not assessed by this prototype,
-BB-03,Hydration visit,clean,0,,Not assessed by this prototype,
-BB-04,Serial cardiac testing,clean,0,,Not assessed by this prototype,Two units on one cardiac-test line remain below the published four-unit limit.
-BB-05,Repeat laboratory test with modifier 91,clean,0,,Not assessed by this prototype,Do not flag a duplicate; the repeat-test modifier is present. Modified price matching is outside the prototype.
-BB-06,Commercial plan price matching,clean,0,,Not assessed by this prototype,Coding findings are Medicare-reference questions only. Expect the exact-plan negotiated CBC rate of $12.83; do not call the billed-price difference an overcharge.
-BB-07,Repeated blood-count charge,planted,1,"duplicate lines 1,3",Not assessed by this prototype,"Only the repeated blood-count line should raise a duplicate question; day units are 2, below the MUE of 4."
-BB-08,Repeated blood-collection charge,planted,1,"duplicate lines 1,2",Not assessed by this prototype,Two blood-collection units equal the published limit of 2; this is a duplicate question only.
-BB-09,Repeated radiology charge,planted,1,"duplicate lines 1,3",Not assessed by this prototype,Two chest-imaging units remain below the published limit of 3.
-BB-10,Metabolic-panel units above the limit,planted,1,units lines 1,Not assessed by this prototype,"80053: 2 units versus MUE 1, MAI 3. Ask about documentation or exceptions; do not determine that the charge is wrong."
-BB-11,Medication-administration units above the limit,planted,1,units lines 1,Not assessed by this prototype,"96374: 2 units versus MUE 1, MAI 3. Drug supply units are separate code-specific billing units, not a dose comparison."
-BB-12,Units split over two differently priced lines,planted,1,"units lines 1,3",Not assessed by this prototype,"Aggregate same-provider, same-date 80053 units to 2. Different amounts mean no duplicate flag."
-BB-13,Blood-count units above the limit,planted,1,units lines 1,Not assessed by this prototype,"85025: 5 units versus MUE 4, MAI 3."
-BB-14,Duplicate and day-unit questions together,planted,2,"duplicate lines 1,2; units lines 1,2",Not assessed by this prototype,Show two separate questions. Do not add the flagged amounts together or call the result savings.
-BB-15,Repeat imaging with modifier 76,edge,0,,Not assessed by this prototype,Repeat modifier prevents a duplicate question; total 2 remains below MUE 3. Modified price matching stays unable to assess.
-BB-16,Same code on different dates,edge,0,,Not assessed by this prototype,Each date has one unit; never aggregate across dates or flag these as duplicates.
-BB-17,Quarter boundary,edge,0,,Not assessed by this prototype,The October line needs Q4 references. Its unit and price checks must be unable to assess; Q3 must not be carried forward.
-BB-18,Same code from separate billing providers,edge,0,,Not assessed by this prototype,Separate provider identifiers: no duplicate and no combined day-unit MUE question.
-BB-19,Missing and unsupported fields,edge,0,,Not assessed by this prototype,"Preserve the missing code, missing units and missing charge. Unknown code 99999 is outside the subset. Do not convert blanks to zero or present a complete statement total."
-BB-20,NCCI PTP coverage gap,edge,0,,PTP review required; unsupported by the current app,"Each MUE is within its limit, but the active hospital NCCI PTP pair 80053/80048 requires a code-pair question. The current app cannot assess PTP and will not find it. This is a documented missing capability, not a clean bill."
+BB-01,Routine emergency evaluation,clean,0,,No PTP question within supported scope,
+BB-02,Imaging and blood collection,clean,0,,No PTP question within supported scope,
+BB-03,Hydration visit,clean,0,,No PTP question within supported scope,
+BB-04,Serial cardiac testing,clean,0,,No PTP question within supported scope,Two units on one cardiac-test line remain below the published four-unit limit.
+BB-05,Repeat laboratory test with modifier 91,clean,0,,No PTP question within supported scope,Do not flag a duplicate; the repeat-test modifier is present. Modified price matching is outside the prototype.
+BB-06,Commercial plan price matching,clean,0,,No PTP question within supported scope,Coding findings are Medicare-reference questions only. Expect the exact-plan negotiated CBC rate of $12.83; do not call the billed-price difference an overcharge.
+BB-07,Repeated blood-count charge,planted,1,"duplicate lines 1,3",No PTP question within supported scope,"Only the repeated blood-count line should raise a duplicate question; day units are 2, below the MUE of 4."
+BB-08,Repeated blood-collection charge,planted,1,"duplicate lines 1,2",No PTP question within supported scope,Two blood-collection units equal the published limit of 2; this is a duplicate question only.
+BB-09,Potential bundling without an exception modifier,planted,1,"bundling lines 1,2",bundling question,"Active hospital PTP pair 96360/96374, modifier indicator 1. No associated exception modifier is present; ask why the services were billed separately."
+BB-10,Metabolic-panel units above the limit,planted,1,units lines 1,No PTP question within supported scope,"80053: 2 units versus MUE 1, MAI 3. Ask about documentation or exceptions; do not determine that the charge is wrong."
+BB-11,Medication-administration units above the limit,planted,1,units lines 1,No PTP question within supported scope,"96374: 2 units versus MUE 1, MAI 3. Drug supply units are separate code-specific billing units, not a dose comparison."
+BB-12,Units split over two differently priced lines,planted,1,"units lines 1,3",No PTP question within supported scope,"Aggregate same-provider, same-date 80053 units to 2. Different amounts mean no duplicate flag."
+BB-13,Blood-count units above the limit,planted,1,units lines 1,No PTP question within supported scope,"85025: 5 units versus MUE 4, MAI 3."
+BB-14,Duplicate and day-unit questions together,planted,2,"duplicate lines 1,2; units lines 1,2",No PTP question within supported scope,Show two separate questions. Do not add the flagged amounts together or call the result savings.
+BB-15,Possible PTP exception with modifier 59,edge,0,,modifier documentation review,"Same active 96360/96374 pair as BB-09. Modifier 59 routes to documentation review, not a bundling finding or automatic clearance. Modified price matching stays unable to assess."
+BB-16,PTP pair on different dates,edge,0,,No PTP question within supported scope,The 96360/96374 pair is not a bundling question across different dates. Each MUE is within its same-date limit.
+BB-17,Quarter boundary,edge,0,,No PTP question within supported scope,"The October 80053/80048 pair needs Q4 references. October unit, PTP and price checks must be unable to assess; Q3 must not be carried forward."
+BB-18,PTP pair from separate billing providers,edge,0,,No PTP question within supported scope,Do not raise a 96360/96374 PTP question across distinct billing providers. Each MUE is within its same-provider limit.
+BB-19,Missing and unsupported fields,edge,0,,No PTP question within supported scope,"Preserve the missing code, missing units and missing charge. Unknown code 99999 is outside the subset. Do not convert blanks to zero or present a complete statement total."
+BB-20,Bundled metabolic panels,planted,1,"bundling lines 1,2",bundling question,"Each MUE is within its limit, but active hospital NCCI PTP pair 80053/80048 raises a separate-billing question. Modifier indicator 0 does not permit a modifier bypass."

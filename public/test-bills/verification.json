@@ -2,167 +2,167 @@
   "date": "2026-10-17",
   "bills_verified": 20,
   "bills_expected": 20,
-  "statement": "Checks compare visible PDF extraction and current supported rules against developer-authored fixtures. Not independent/coder validation. PTP remains unsupported.",
+  "statement": "Visible extraction, duplicate/MUE/PTP checks and modifier reviews match developer-authored fixtures. Not independent/coder validation; scoped to 20 codes and Q3 hospital outpatient references.",
   "results": [
     {
       "id": "BB-01",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 15,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 20,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-02",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-03",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-04",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 12,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 16,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-05",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-06",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-07",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-08",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-09",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "bundling question"
     },
     {
       "id": "BB-10",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-11",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-12",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-13",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 6,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 8,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-14",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-15",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 9,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "modifier documentation review"
     },
     {
       "id": "BB-16",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 6,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 8,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-17",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 6,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 12,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-18",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 6,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 8,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-19",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 12,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 16,
       "packet": "generated",
-      "ptp": "not implemented"
+      "ptp": "matches authored per-line PTP key"
     },
     {
       "id": "BB-20",
       "extraction": "matches authored fixture",
-      "duplicate_mue_findings": "matches authored key",
-      "line_checks": 6,
+      "duplicate_mue_ptp_findings": "matches authored key",
+      "line_checks": 8,
       "packet": "generated",
-      "ptp": "KNOWN GAP - not implemented"
+      "ptp": "bundling question"
     }
   ]
 }

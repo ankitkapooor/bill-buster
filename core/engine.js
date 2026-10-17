@@ -1,4 +1,5 @@
 import references from '../data/references.json' with { type: 'json' };
+import { assessPTP } from './ncci.js';
 export const REFERENCES = references;
 export class BillError extends Error {}
 export const DISCLAIMER = 'Questions to discuss with billing, not a determination of an error. Medicare coding references may not apply to your plan. Published prices do not establish patient responsibility or savings.';
@@ -81,7 +82,8 @@ export function analyze(raw, refs=REFERENCES) {
     price.evidence=[...new Map(price.evidence.map(e=>[e.id+e.detail,e])).values()];prices.push(price);
     checks.push({line:lid,check:'price',status:price.status,detail:price.note});
   }
-  return {bill,findings,checks,prices,disclaimer:DISCLAIMER,quarter:refs.quarter,price_date:refs.price_date,total:bill.lines.reduce((sum,x)=>sum+cents(x.amount??0),0)/100,amount_complete:bill.lines.every(x=>x.amount!=null),unable_count:checks.filter(x=>x.status==='unable').length,check_count:checks.length};
+  const ptp=assessPTP(bill,refs);findings.push(...ptp.findings);checks.push(...ptp.checks);
+  return {bill,findings,modifier_reviews:ptp.modifier_reviews,checks,prices,disclaimer:DISCLAIMER,quarter:refs.quarter,price_date:refs.price_date,total:bill.lines.reduce((sum,x)=>sum+cents(x.amount??0),0)/100,amount_complete:bill.lines.every(x=>x.amount!=null),unable_count:checks.filter(x=>x.status==='unable').length,check_count:checks.length};
 }
 
 export const CHECKLIST=[
@@ -95,11 +97,11 @@ export const CHECKLIST=[
 
 export function packet(result) {
   const citations=new Map(),paragraphs=['To: Keck Hospital of USC billing office','Subject: Request for clarification of itemized outpatient charges','Hello,','Please help me understand the following charges on my outpatient facility bill. These are questions for review, not a claim that a charge is incorrect.'];
-  for(const finding of result.findings) {
+  for(const finding of [...result.findings,...(result.modifier_reviews??[])]) {
     finding.evidence.forEach(e=>citations.set(e.id,e));
     paragraphs.push(`${finding.question} [${finding.evidence.map(e=>e.id).join('; ')}]`);
   }
-  if(!result.findings.length)paragraphs.push('The limited prototype checks did not identify a coding question. Please explain any charges I ask about; this review does not establish that the entire bill is correct.');
+  if(!result.findings.length&&!result.modifier_reviews?.length)paragraphs.push('The limited prototype checks did not identify a coding question. Please explain any charges I ask about; this review does not establish that the entire bill is correct.');
   for(const p of result.prices.filter(p=>p.status==='context')) {
     const values=[['gross','published gross'],['cash','discounted cash'],['negotiated','matched negotiated']].filter(([key])=>p[key]).map(([key,label])=>`${label} ${money(p[key].total)} for ${p.units} units`).join(', ');
     p.evidence.forEach(e=>citations.set(e.id,e));
@@ -110,7 +112,7 @@ export function packet(result) {
   for(const [id,e] of citations)paragraphs.push(`[${id}] ${e.label}. ${e.detail}${e.url?' '+e.url:''}`);
   paragraphs.push(result.disclaimer);
   const letter=paragraphs.join('\n\n');
-  const actual=new Set([...letter.matchAll(/\[((?:BILL|MUE|KECK)-[^\]]+)\]/g)].flatMap(m=>m[1].split(';').map(s=>s.trim())));
+  const actual=new Set([...letter.matchAll(/\[((?:BILL|MUE|PTP|KECK)-[^\]]+)\]/g)].flatMap(m=>m[1].split(';').map(s=>s.trim())));
   if(actual.size!==citations.size||[...actual].some(id=>!citations.has(id)))throw new Error('The letter failed citation verification.');
   return {letter,checklist:CHECKLIST,validation:'Verified template: all generated figures and citations come from confirmed lines and local references.'};
 }

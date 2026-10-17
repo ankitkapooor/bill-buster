@@ -1,6 +1,6 @@
 # Reference data notices
 
-CMS outpatient hospital MUE table, effective July 1, 2026:
+CMS outpatient hospital MUE table and hospital NCCI PTP v322r0 tables, effective July 1, 2026:
 
 Current Procedural Terminology (CPT) codes, descriptions and other data only are copyright 2025 American Medical Association. All rights reserved.
 
@@ -15,3 +15,5 @@ The source pack includes the CMS/AMA license agreement at `documentation/licensi
 Keck Hospital of USC machine-readable standard charges: file version 3.0.0, last_updated_on 2026-04-01. Hospital-published prices are not patient liability, an insured patient's applicable contracted rate, or verified savings. Original file hash, source URL and source record numbers are in `references.json`.
 
 No endorsement by the American Medical Association, CMS, Medicare or Keck Hospital of USC is implied. No comprehensive CPT descriptions or full CMS tables are published by this project. Bill descriptions and charges in the sample are synthetic.
+
+NCCI PTP subset: all four full Q3 2026 hospital outpatient TXT parts were scanned for both columns in the selected 20-code set. Seven records are included with source filenames, line numbers, modifier indicators, effective and deletion dates. The complete source-file hashes and record counts are retained. This does not provide coverage for other codes, quarters, practitioner bills or other NCCI edit families.

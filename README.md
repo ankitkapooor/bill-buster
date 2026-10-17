@@ -16,8 +16,8 @@ Open http://localhost:8001. Requires Node.js 22 or later. `npm run build` produc
 ## Try the entire journey
 
 1. Click **Try the sample bill**, or download the sample PDF and select it using **Upload synthetic PDF**. The file stays on the device.
-2. Confirm the five bill lines and tick the confirmation box.
-3. Click **Review this bill**. Expected questions: line 4 may duplicate line 2; line 5 has 2 units of 80053 against the published Q3 outpatient MUE of 1, indicator 3.
+2. Confirm the six bill lines and tick the confirmation box.
+3. Click **Review this bill**. Expected questions: line 4 may duplicate line 2; line 5 has 2 units of 80053 against the published Q3 outpatient MUE of 1, indicator 3; lines 5/6 contain the active 80053/80048 NCCI PTP bundling edit, modifier indicator 0.
 4. Expand the evidence, price context and coverage table.
 5. Click **Prepare my inquiry**, edit the letter, and download PDF or text. The phone checklist is included.
 
@@ -28,10 +28,11 @@ The sample charges are invented. References are real, extracted from the supplie
 - Keck Hospital of USC, outpatient facility, July 1–September 30, 2026; 20 selected codes.
 - Possible duplicates require matching date, code, provider, modifiers, units and amount. Repeat modifiers 76/77/91 prevent duplicate flags. Separate providers are not combined.
 - MUE indicator 1 uses claim-line units; indicators 2/3 aggregate code, date and provider. Missing units make the aggregate unassessable. Findings preserve indicator, rationale, quarter and source CSV record.
+- NCCI hospital PTP pairs are checked against seven records filtered from all four full Q3 table parts. Same provider/date and CMS column direction are preserved. Effective and deletion dates apply (deletion is the last active day); indicator 9 is inactive. Indicator 0 cannot be bypassed by a modifier; indicator 1 with a possible associated modifier routes to documentation review, never automatic clearance. Repeat modifiers 76/77 alone do not bypass PTP. See `docs/NCCI.md`.
 - Prices match facility, outpatient/both, unmodified CPT/HCPCS codes across all code columns. Distinct gross/cash prices remain unresolved; negotiated amounts require exact payer and plan. Formula-only rates stay unknown. Confirm the service-unit basis with billing. Data vintage is not proof of the applicable service-date rate.
 - Unknown code/date/units/amount does not receive a false all-clear. Dates outside the quarter do not use Q3 references. Unsupported hospitals and settings are rejected.
 - Template letters use only confirmed lines and cited findings. A source-ID invariant verifies generated citations. User edits are labeled unvalidated and preserved on export. PDF uses a standard Western font; an explanatory note appears if unsupported characters must be replaced. Text export preserves all characters.
-- No PTP code-pair review, AI calls, real patient documents, scans, EOBs, automatic sending, stored records or savings calculations.
+- No AI calls, real patient documents, scans, EOBs, automatic sending, stored records or savings calculations.
 
 ## API key placeholders
 
@@ -55,7 +56,7 @@ npm run check
 npm run build
 ```
 
-The 35 tests include 20 statement-bank PDF extraction/answer-key tests and the original 15 tests: ten PDF-to-packet runs, clean bills, repeats, provider separation, MUE indicator logic, quarter boundaries, exact plan matching, ambiguous prices, missing fields, input rejection and output citations. They do not establish the PRD’s independent 30-bill/coder evaluation or real-world accuracy.
+The 52 tests include 20 statement-bank PDF extraction/answer-key tests, 17 dedicated NCCI tests, and the original 15 workflow tests: ten PDF-to-packet runs, clean bills, repeats, provider separation, MUE indicator logic, quarter boundaries, exact plan matching, ambiguous prices, missing fields, input rejection and output citations. They do not establish the PRD’s independent 30-bill/coder evaluation or real-world accuracy.
 
 ## Deployment
 
@@ -71,9 +72,9 @@ The only dependencies at runtime are bundled browser libraries: Mozilla PDF.js v
 
 Browse https://billbuster.ankitkapoor.me/test-bills/ or open `public/test-bills/` locally. The ZIP contains 20 realistic-looking, clearly labeled synthetic statements and separate CSV/JSON answer keys. PDFs contain visible statement tables, not hidden extraction data. Patient identity/account fields are not imported into the tool.
 
-Cases BB-01–06 have no planted duplicate/MUE findings; BB-07–14 contain planted questions; BB-15–20 exercise modifiers, date/provider separation, missing values, quarter boundaries and a known PTP coverage gap. BB-20's 80053/80048 pair is active in the supplied Q3 hospital PTP table but is **not assessed by the current engine**. No result in this bank implies comprehensive coding clearance.
+Bank v2 contains 6 controls, 9 bills with planted questions and 5 edge cases. BB-09 raises a modifier-indicator-1 bundling question for 96360/96374. BB-15 uses modifier 59 on the same pair and must request documentation review. BB-20 raises the modifier-indicator-0 80053/80048 bundling question. BB-16/18 separate dates/providers; BB-17 is outside Q3 for its October pair. No result implies comprehensive coding clearance.
 
-`fixtures/bill-bank/cases.json` holds authored expectations, cross-checked against original source CSV/TXT records. `tests/bill-bank.test.mjs` compares every extracted field, all three per-line checks and packet generation against that key. `public/test-bills/verification.json` records the contract checks; it is not an accuracy study. The bank uses actual indicator-3 source records; indicator-1/2 logic is covered only by the separate unit tests.
+`fixtures/bill-bank/cases.json` holds authored expectations, cross-checked against original source CSV/TXT records. `tests/bill-bank.test.mjs` compares every extracted field, all four per-line checks (duplicate, MUE, PTP and price), modifier reviews and packet generation against that key. `public/test-bills/verification.json` records the contract checks; it is not an accuracy study. The bank uses actual indicator-3 source records; indicator-1/2 logic is covered only by the separate unit tests.
 
 To recreate the PDFs, install ReportLab in a Python environment and run:
 

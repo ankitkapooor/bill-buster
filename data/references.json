@@ -148,6 +148,103 @@
       "row": 13192
     }
   },
+  "ptp": {
+    "complete": true,
+    "codes": [
+      "99284",
+      "85025",
+      "36415",
+      "J7030",
+      "80053",
+      "93005",
+      "71046",
+      "96360",
+      "96361",
+      "96374",
+      "96375",
+      "J2405",
+      "81001",
+      "80048",
+      "83690",
+      "84484",
+      "70450",
+      "74177",
+      "71275",
+      "J1885"
+    ],
+    "records": [
+      {
+        "column1": "71275",
+        "column2": "96360",
+        "effective": "2009-01-01",
+        "deletion": null,
+        "modifier_indicator": 1,
+        "rationale": "Standards of medical/surgical practice",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 189022
+      },
+      {
+        "column1": "71275",
+        "column2": "96374",
+        "effective": "2009-01-01",
+        "deletion": null,
+        "modifier_indicator": 1,
+        "rationale": "Standards of medical/surgical practice",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 189025
+      },
+      {
+        "column1": "71275",
+        "column2": "96375",
+        "effective": "2009-01-01",
+        "deletion": null,
+        "modifier_indicator": 1,
+        "rationale": "Standards of medical/surgical practice",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 189026
+      },
+      {
+        "column1": "74177",
+        "column2": "96360",
+        "effective": "2012-07-01",
+        "deletion": null,
+        "modifier_indicator": 1,
+        "rationale": "Standards of medical/surgical practice",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 190949
+      },
+      {
+        "column1": "74177",
+        "column2": "96374",
+        "effective": "2012-07-01",
+        "deletion": null,
+        "modifier_indicator": 1,
+        "rationale": "Standards of medical/surgical practice",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 190951
+      },
+      {
+        "column1": "80053",
+        "column2": "80048",
+        "effective": "2000-07-01",
+        "deletion": null,
+        "modifier_indicator": 0,
+        "rationale": "CPT Manual or CMS manual coding instruction",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 213077
+      },
+      {
+        "column1": "96360",
+        "column2": "96374",
+        "effective": "2009-01-01",
+        "deletion": null,
+        "modifier_indicator": 1,
+        "rationale": "Misuse of Column Two code with Column One code",
+        "file": "ccioph-v322r0-f4.txt",
+        "row": 355092
+      }
+    ]
+  },
   "prices": {
     "99284": [],
     "85025": [
@@ -5986,6 +6083,33 @@
     ]
   },
   "sources": {
+    "ptp": {
+      "quarter": "2026 Q3",
+      "setting": "hospital outpatient",
+      "files": [
+        {
+          "file": "cms/ptp/2026-q3/hospital_outpatient/medicare-ncci-2026q3-hospital-ptp-edits-ccioph-v322r0-f1/ccioph-v322r0-f1.txt",
+          "sha256": "59404791413b86a22e228da1941f085d71c1b7a2b24abfd6f45d54dca14b2191",
+          "records": 475091
+        },
+        {
+          "file": "cms/ptp/2026-q3/hospital_outpatient/medicare-ncci-2026q3-hospital-ptp-edits-ccioph-v322r0-f2/ccioph-v322r0-f2.txt",
+          "sha256": "cb5b9c3637dc1e4ea0e25383b99403e973827e9951625bbedee947565e921a12",
+          "records": 475181
+        },
+        {
+          "file": "cms/ptp/2026-q3/hospital_outpatient/medicare-ncci-2026q3-hospital-ptp-edits-ccioph-v322r0-f3/ccioph-v322r0-f3.txt",
+          "sha256": "6c51f6884a60a62571665d95b6d28bde2bab7601551f07c75c6e94951f3ea73b",
+          "records": 474870
+        },
+        {
+          "file": "cms/ptp/2026-q3/hospital_outpatient/medicare-ncci-2026q3-hospital-ptp-edits-ccioph-v322r0-f4/ccioph-v322r0-f4.txt",
+          "sha256": "c8eb6bf214213e529ea44c46e49f2ecf97d6a2f35001685a91cc8f66e08f25ac",
+          "records": 439587
+        }
+      ],
+      "url": "https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-procedure-procedure-ptp-edits"
+    },
     "mue": {
       "file": "cms/mue/2026-q3/medicare-ncci-2026-q3-facility-outpatient-hospital-services-mue-table/MCR_MUE_OutpatientHospitalServices_Eff_07-01-2026.csv",
       "sha256": "db6341c5576b132534a89378a8ce6f32d7f7108862250e5b076974c8d720be1b",

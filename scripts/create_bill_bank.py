@@ -56,8 +56,9 @@ def make_cases():
   line('85025',amount=212),line('80048',amount=125),line('85025',amount=212)], [('duplicate',[1,3])], 'Only the repeated blood-count line should raise a duplicate question; day units are 2, below the MUE of 4.')
  add('Repeated blood-collection charge','planted',[
   line('36415',amount=48),line('36415',amount=48),line('85025',amount=212)], [('duplicate',[1,2])], 'Two blood-collection units equal the published limit of 2; this is a duplicate question only.')
- add('Repeated radiology charge','planted',[
-  line('71046',amount=330),line('99284',amount=1850),line('71046',amount=330)], [('duplicate',[1,3])], 'Two chest-imaging units remain below the published limit of 3.')
+ add('Potential bundling without an exception modifier','planted',[
+  line('96360',amount=640),line('96374',amount=590),line('J7030',amount=125)], [('bundling',[1,2])], 'Active hospital PTP pair 96360/96374, modifier indicator 1. No associated exception modifier is present; ask why the services were billed separately.',
+  ptp=dict(column1='96360',column2='96374',modifier_indicator=1,effective='2009-01-01',deletion=None,expected='bundling question',source='ccioph-v322r0-f4.txt',source_line=355092))
  add('Metabolic-panel units above the limit','planted',[
   line('80053',units=2,amount=480),line('85025',amount=212),line('36415',amount=48)], [('units',[1])], '80053: 2 units versus MUE 1, MAI 3. Ask about documentation or exceptions; do not determine that the charge is wrong.')
  add('Medication-administration units above the limit','planted',[
@@ -68,19 +69,21 @@ def make_cases():
   line('85025',units=5,amount=1060),line('36415',amount=48)], [('units',[1])], '85025: 5 units versus MUE 4, MAI 3.')
  add('Duplicate and day-unit questions together','planted',[
   line('80053',amount=240),line('80053',amount=240),line('99284',amount=1850)], [('duplicate',[1,2]),('units',[1,2])], 'Show two separate questions. Do not add the flagged amounts together or call the result savings.')
- add('Repeat imaging with modifier 76','edge',[
-  line('71046',amount=330),line('71046',amount=330,modifiers='76'),line('99284',amount=1850)],note='Repeat modifier prevents a duplicate question; total 2 remains below MUE 3. Modified price matching stays unable to assess.')
- add('Same code on different dates','edge',[
-  line('80053',amount=240,service_date='2026-09-29'),line('80053',amount=240,service_date='2026-09-30')],note='Each date has one unit; never aggregate across dates or flag these as duplicates.')
+ add('Possible PTP exception with modifier 59','edge',[
+  line('96360',amount=640),line('96374',amount=590,modifiers='59'),line('J7030',amount=125)],note='Same active 96360/96374 pair as BB-09. Modifier 59 routes to documentation review, not a bundling finding or automatic clearance. Modified price matching stays unable to assess.',
+  ptp=dict(column1='96360',column2='96374',modifier_indicator=1,effective='2009-01-01',deletion=None,expected='modifier documentation review',source='ccioph-v322r0-f4.txt',source_line=355092))
+ cases[-1]['expected_modifier_reviews']=[dict(kind='bundling',lines=[1,2])]
+ add('PTP pair on different dates','edge',[
+  line('96360',amount=640,service_date='2026-09-29'),line('96374',amount=590,service_date='2026-09-30')],note='The 96360/96374 pair is not a bundling question across different dates. Each MUE is within its same-date limit.')
  add('Quarter boundary','edge',[
-  line('80053',amount=240,service_date='2026-09-30'),line('80053',amount=240,service_date='2026-10-01')],note='The October line needs Q4 references. Its unit and price checks must be unable to assess; Q3 must not be carried forward.')
- add('Same code from separate billing providers','edge',[
-  line('80053',amount=240,provider='FAC-A'),line('80053',amount=240,provider='FAC-B')],note='Separate provider identifiers: no duplicate and no combined day-unit MUE question.')
+  line('80053',amount=240,service_date='2026-09-30'),line('80053',amount=240,service_date='2026-10-01'),line('80048',amount=125,service_date='2026-10-01')],note='The October 80053/80048 pair needs Q4 references. October unit, PTP and price checks must be unable to assess; Q3 must not be carried forward.')
+ add('PTP pair from separate billing providers','edge',[
+  line('96360',amount=640,provider='FAC-A'),line('96374',amount=590,provider='FAC-B')],note='Do not raise a 96360/96374 PTP question across distinct billing providers. Each MUE is within its same-provider limit.')
  add('Missing and unsupported fields','edge',[
   line('',amount=90),line('85025',units=None,amount=212),line('J7030',amount=None),line('99999',amount=55)],note='Preserve the missing code, missing units and missing charge. Unknown code 99999 is outside the subset. Do not convert blanks to zero or present a complete statement total.')
- add('NCCI PTP coverage gap','edge',[
-  line('80053',amount=240),line('80048',amount=125)],note='Each MUE is within its limit, but the active hospital NCCI PTP pair 80053/80048 requires a code-pair question. The current app cannot assess PTP and will not find it. This is a documented missing capability, not a clean bill.',
-  ptp=dict(column1='80053',column2='80048',modifier_indicator=0,effective='2000-07-01',deletion=None,expected='PTP review required; unsupported by the current app',source='ccioph-v322r0-f4.txt',source_line=213077))
+ add('Bundled metabolic panels','planted',[
+  line('80053',amount=240),line('80048',amount=125)], [('bundling',[1,2])],note='Each MUE is within its limit, but active hospital NCCI PTP pair 80053/80048 raises a separate-billing question. Modifier indicator 0 does not permit a modifier bypass.',
+  ptp=dict(column1='80053',column2='80048',modifier_indicator=0,effective='2000-07-01',deletion=None,expected='bundling question',source='ccioph-v322r0-f4.txt',source_line=213077))
  return cases
 
 def draw_bill(case,path):
@@ -154,7 +157,7 @@ def draw_bill(case,path):
  right(576,130,'NO REMITTANCE REQUIRED',9,True)
  right(576,113,'No payment address or online payment link',8,color=muted)
  hline(86)
- text(36,67,'Bill Buster test bank v1 | Synthetic document | For prototype testing only',7,color=muted)
+ text(36,67,'Bill Buster test bank v2 | Synthetic document | For prototype testing only',7,color=muted)
  right(576,67,'Page 1 of 1',7,color=muted)
  c.save()
 
@@ -173,7 +176,10 @@ def create(source=None):
   ptp=next((root/'cms/ptp/2026-q3/hospital_outpatient').rglob('ccioph-v322r0-f4.txt'))
   pair=ptp.read_text().splitlines()[213076].split('\t')
   assert pair[:2]==['80053','80048'] and pair[3:6]==['20000701','*','0']
-  provenance['ptp']=dict(file=str(ptp.relative_to(root)),sha256=hashlib.sha256(ptp.read_bytes()).hexdigest(),source_line=213077,values=pair)
+  ptp_rows=ptp.read_text().splitlines()
+  hydration=ptp_rows[355091].split('\t')
+  assert hydration[:2]==['96360','96374'] and hydration[3:6]==['20090101','*','1']
+  provenance['ptp']=dict(file=str(ptp.relative_to(root)),sha256=hashlib.sha256(ptp.read_bytes()).hexdigest(),records=[dict(source_line=213077,values=pair),dict(source_line=355092,values=hydration)])
  for case in cases:
   case['pdf']=f"bills/{case['id']}.pdf"
   draw_bill(case,OUT/f"{case['id']}.pdf")
@@ -189,16 +195,19 @@ def create(source=None):
     # Source gross/cash rows for J1885 have both 34.59 and 43.17;
     # J2405 has both 0.62 and 20.04. The unresolved CDM variants must abstain.
     price='unable' if l['modifiers'] or l['code'] in ('','99999','99284','J1885','J2405') or l['units'] is None or l['amount'] is None or not '2026-07-01'<=l['date']<='2026-09-30' else 'context'))
+   row=rows[-1]
+   row['ptp']='question' if any(f['kind']=='bundling' and i in f['lines'] for f in case['expected_findings']) else ('review' if any(i in f['lines'] for f in case.get('expected_modifier_reviews',[])) else ('unable' if l['code'] not in limits or not l['provider'] or not '2026-07-01'<=l['date']<='2026-09-30' or any(o['date']==l['date'] and (not o['provider'] or o['provider']==l['provider']) and (not o['provider'] or o['code'] not in limits) for o in case['bill']['lines']) else 'clear'))
+  case.setdefault('expected_modifier_reviews',[])
   case['expected_line_checks']=rows
- key=dict(version='1.0',created='2026-10-17',scope='Keck outpatient, Q3 2026, synthetic bills',
-  limitations='Developer-authored regression bank, not held-out or coder-validated. PTP case BB-20 documents an unsupported capability; no clinical correctness or real-world accuracy claim.',
+ key=dict(version='2.0',created='2026-10-17',scope='Keck outpatient, Q3 2026, synthetic bills',
+  limitations='Developer-authored regression bank, not held-out or coder-validated. PTP cases test bundling and documentation review within the 20-code Q3 hospital subset; no clinical correctness or real-world accuracy claim.',
   original_source_provenance=provenance,cases=cases)
  (FIXTURES/'cases.json').write_text(json.dumps(key,indent=2)+'\n')
  (PUBLIC/'answer-key.json').write_text(json.dumps(key,indent=2)+'\n')
  with (PUBLIC/'answer-key.csv').open('w',newline='') as f:
   w=csv.writer(f);w.writerow(['bill_id','scenario','category','expected_coding_questions','expected_findings','ptp_coverage','review_note'])
-  for case in cases:w.writerow([case['id'],case['title'],case['category'],len(case['expected_findings']),'; '.join(f"{x['kind']} lines {','.join(map(str,x['lines']))}" for x in case['expected_findings']),case['ptp']['expected'] if case['ptp'] else 'Not assessed by this prototype',case['note']])
- guide='''BILL BUSTER - 20 SYNTHETIC STATEMENTS\n\nAll names, accounts, charges and clinical combinations are invented. These are not hospital-issued documents, clinical records or payment requests. The hospital name identifies the prototype reference scope. No hospital logo or patient data is used.\n\nHOW TO TEST\n1. Open https://billbuster.ankitkapoor.me and choose Upload synthetic PDF.\n2. Choose one BB-xx.pdf, inspect the extracted lines, and confirm them.\n3. Review the questions and evidence, then download an inquiry packet.\n4. Compare with answer-key.csv (overview) or answer-key.json (line-level details).\n\nThe PDFs contain ordinary visible statement tables. They do not embed an invisible JSON payload, answers, or a hidden pipe-separated extraction appendix. Patient/account fields are not imported into the prototype.\n\nCASES\nBB-01 through BB-06: no planted duplicate/MUE questions.\nBB-07 through BB-14: planted duplicate, MUE or combined questions.\nBB-15 through BB-20: repeat modifiers, date/provider separation, quarter boundary, missing data and a PTP coverage gap.\n\nIMPORTANT LIMITS\nMUE is part of NCCI. The app checks published Q3 2026 hospital-outpatient MUEs for its selected codes and asks questions; it does not decide liability. All selected source MUE records in this bank have adjudication indicator 3. This bank therefore does not establish indicator-1/2 source coverage.\n\nBB-20 includes an active hospital PTP pair: column 1 80053, column 2 80048, modifier indicator 0, effective 2000-07-01, no deletion in the supplied Q3 table. The app does not yet implement PTP review. It produces no duplicate/MUE question for this case; that is a known coverage gap, not evidence that the bill is clean.\n\nPublished prices are context, not patient responsibility or savings. Unknown/missing fields and dates outside Q3 must not be cleared. Missing charges make only a known-charge subtotal possible.\n\nExpected findings were authored from the synthetic specifications and checked against the supplied source CSV/TXT. This is a developer-authored regression bank, not an independent held-out accuracy study or a billing-specialist evaluation.\n\nSOURCE NOTICES\nCPT codes and other data only are copyright 2025 American Medical Association. All rights reserved. CPT is a registered trademark of the AMA. Applicable FARS/DFARS Restrictions Apply to Government Use. No endorsement by AMA, CMS or Keck Hospital of USC is implied. The original source pack retains source terms.\n'''
+  for case in cases:w.writerow([case['id'],case['title'],case['category'],len(case['expected_findings']),'; '.join(f"{x['kind']} lines {','.join(map(str,x['lines']))}" for x in case['expected_findings']),case['ptp']['expected'] if case['ptp'] else 'No PTP question within supported scope',case['note']])
+ guide='''BILL BUSTER - 20 SYNTHETIC STATEMENTS (V2 - NCCI PTP ENABLED)\n\nAll names, accounts, charges and clinical combinations are invented. These are not hospital-issued documents, clinical records or payment requests. The hospital name identifies the prototype reference scope. No hospital logo or patient data is used.\n\nHOW TO TEST\n1. Open https://billbuster.ankitkapoor.me and choose Upload synthetic PDF.\n2. Choose one BB-xx.pdf, inspect the extracted lines, and confirm them.\n3. Review the questions and evidence, then download an inquiry packet.\n4. Compare with answer-key.csv (overview) or answer-key.json (line-level details).\n\nThe PDFs contain ordinary visible statement tables. They do not embed an invisible JSON payload, answers, or a hidden pipe-separated extraction appendix. Patient/account fields are not imported into the prototype.\n\nCASES\nBB-01 through BB-06: no planted coding questions.\nBB-07 through BB-14: planted duplicate, MUE, PTP or combined questions. BB-09 tests indicator-1 bundling without a modifier.\nBB-15: indicator-1 PTP modifier 59 documentation review, not an automatic clearance. BB-16: same code pair on different dates. BB-17: an October pair outside Q3 coverage. BB-18: different billing providers. BB-19: missing data. BB-20: indicator-0 PTP bundling question for 80053/80048.\n\nIMPORTANT LIMITS\nMUE is part of NCCI. The app checks published Q3 2026 hospital-outpatient MUEs for its selected codes and asks questions; it does not decide liability. All selected source MUE records in this bank have adjudication indicator 3. This bank therefore does not establish indicator-1/2 source coverage.\n\nBB-20 includes an active hospital PTP pair: column 1 80053, column 2 80048, modifier indicator 0, effective 2000-07-01, no deletion in the supplied Q3 table. The app now raises a bundling question for this case, carries the source row into the findings and letter, and does not treat a modifier as a bypass for indicator 0.\n\nPublished prices are context, not patient responsibility or savings. Unknown/missing fields and dates outside Q3 must not be cleared. Missing charges make only a known-charge subtotal possible.\n\nExpected findings were authored from the synthetic specifications and checked against the supplied source CSV/TXT. This is a developer-authored regression bank, not an independent held-out accuracy study or a billing-specialist evaluation.\n\nSOURCE NOTICES\nCPT codes and other data only are copyright 2025 American Medical Association. All rights reserved. CPT is a registered trademark of the AMA. Applicable FARS/DFARS Restrictions Apply to Government Use. No endorsement by AMA, CMS or Keck Hospital of USC is implied. The original source pack retains source terms.\n'''
  (PUBLIC/'README.txt').write_text(guide)
  (PUBLIC/'catalog.json').write_text(json.dumps([dict(id=c['id'],pdf=c['pdf'],lines=len(c['bill']['lines']),date=min(l['date'] for l in c['bill']['lines'])) for c in cases],indent=2)+'\n')
  archive=OUT/'bill-buster-20-bills.zip'
