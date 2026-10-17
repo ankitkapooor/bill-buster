@@ -1,0 +1,10 @@
+import { build } from 'esbuild';
+import { mkdir,copyFile,writeFile,rm } from 'node:fs/promises';
+import { samplePDF } from '../core/documents.js';
+
+await mkdir('dist',{recursive:true});
+for(const file of ['index.html','styles.css'])await copyFile(`static/${file}`,`dist/${file}`);
+await build({entryPoints:['static/app.js'],bundle:true,format:'esm',target:'es2022',outdir:'dist',splitting:true,minify:true,legalComments:'linked',chunkNames:'chunks/[name]-[hash]'});
+await writeFile('dist/sample-bill.pdf',await samplePDF());
+await writeFile('dist/_headers',`/*\n  Cache-Control: no-cache\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'\n`);
+console.log('Built Bill Buster. All document processing runs locally in the browser.');

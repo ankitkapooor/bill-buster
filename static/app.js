@@ -1,3 +1,5 @@
+import { analyze, packet as createPacket } from '../core/engine.js';
+import { SAMPLE, extractPDF, pdfDocument } from '../core/documents.js';
 'use strict';
 const main = document.querySelector('#main');
 const state = { step: 1, bill: null, result: null, packet: null, extraction: '', method: '', busy: false };
@@ -5,11 +7,6 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;',
 const money = value => value == null ? 'Not available' : new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value);
 let toastTimer;
 function toast(message) { clearTimeout(toastTimer); document.querySelector('#notice').textContent=message; toastTimer=setTimeout(()=>document.querySelector('#notice').textContent='',9000); }
-async function request(path, options={}) {
-  const response=await fetch(path,options);
-  if (!response.ok) { let message='Something went wrong. Please try again.'; try { message=(await response.json()).error||message; } catch {} throw new Error(message); }
-  return response;
-}
 async function busy(button, action) {
   if(state.busy)return;
   state.busy=true; const text=button?.textContent;
@@ -35,18 +32,19 @@ function syncBill() {
 }
 function download(blob,name) { const url=URL.createObjectURL(blob); const link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000); }
 function bind() {
+  document.querySelectorAll('.edit-table tbody tr').forEach(row=>{const labels=['Line','Service date','Code','Description','Units','Line total ($)','Modifiers','Provider',''];[...row.cells].forEach((cell,i)=>cell.dataset.label=labels[i]);});
   document.querySelectorAll('.open-about').forEach(b=>b.onclick=()=>document.querySelector('#about').showModal());
-  const sample=document.querySelector('#load-sample');if(sample)sample.onclick=()=>busy(sample,async()=>{const d=await(await request('/api/sample')).json();state.bill=d.bill;state.method=d.method;state.extraction='';navigate(2);});
+  const sample=document.querySelector('#load-sample');if(sample)sample.onclick=()=>busy(sample,async()=>{const d={bill:structuredClone(SAMPLE),method:'Synthetic sample, loaded from a fixture. Checks run live in your browser after confirmation.'};state.bill=d.bill;state.method=d.method;state.extraction='';navigate(2);});
   const upload=document.querySelector('#upload');if(upload)upload.onclick=()=>document.querySelector('#file').click();
-  const file=document.querySelector('#file');if(file)file.onchange=()=>busy(upload,async()=>{const chosen=file.files[0];if(!chosen)return;if(chosen.size>2*1024*1024)throw new Error('Choose a synthetic PDF smaller than 2 MB.');const d=await(await request('/api/extract',{method:'POST',headers:{'Content-Type':'application/pdf'},body:chosen})).json();state.bill=d.bill;state.method=d.method;state.extraction=d.text;navigate(2);});
+  const file=document.querySelector('#file');if(file)file.onchange=()=>busy(upload,async()=>{const chosen=file.files[0];if(!chosen)return;if(chosen.size>2*1024*1024)throw new Error('Choose a synthetic PDF smaller than 2 MB.');const d=await extractPDF(await chosen.arrayBuffer());state.bill=d.bill;state.method=d.method;state.extraction=d.text;navigate(2);});
   const add=document.querySelector('#add-line');if(add)add.onclick=()=>{syncBill();state.bill.lines.push({date:state.bill.lines[0]?.date||'',code:'',description:'',units:'',amount:'',modifiers:'',provider:'Keck facility'});render();document.querySelector(`[data-row="${state.bill.lines.length-1}"]`).focus();};
   document.querySelectorAll('.remove-line').forEach(b=>b.onclick=()=>{syncBill();state.bill.lines.splice(Number(b.dataset.index),1);render();});
-  const form=document.querySelector('#bill-form');if(form)form.onsubmit=event=>{event.preventDefault();if(!form.reportValidity())return;busy(document.querySelector('#run-checks'),async()=>{syncBill();const d=await(await request('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bill:state.bill})})).json();state.bill=d.result.bill;state.result=d.result;state.packet=d.packet;navigate(3);});};
+  const form=document.querySelector('#bill-form');if(form)form.onsubmit=event=>{event.preventDefault();if(!form.reportValidity())return;busy(document.querySelector('#run-checks'),async()=>{syncBill();const result=analyze(state.bill);const d={result,packet:createPacket(result)};state.bill=d.result.bill;state.result=d.result;state.packet=d.packet;navigate(3);});};
   const back=document.querySelector('#back');if(back)back.onclick=()=>{if(state.step===2)syncBill();if(state.step===4)state.packet.letter=document.querySelector('#letter').value;navigate(state.step-1);};
   const toPacket=document.querySelector('#to-packet');if(toPacket)toPacket.onclick=()=>navigate(4);
   const letter=document.querySelector('#letter');if(letter)letter.oninput=()=>{state.packet.letter=letter.value;state.packet.edited=true;document.querySelector('#validation').textContent='Edited by you. Changes to the verified template have not been automatically validated.';};
-  const reset=document.querySelector('#reset-letter');if(reset)reset.onclick=()=>busy(reset,async()=>{const d=await(await request('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bill:state.bill})})).json();state.packet=d.packet;render();toast('Verified template restored.');});
-  const pdf=document.querySelector('#download-pdf');if(pdf)pdf.onclick=()=>busy(pdf,async()=>{const response=await request('/api/packet.pdf',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bill:state.bill,letter:document.querySelector('#letter').value})});download(await response.blob(),'bill-buster-inquiry.pdf');toast('Your PDF packet is ready.');});
+  const reset=document.querySelector('#reset-letter');if(reset)reset.onclick=()=>busy(reset,async()=>{const result=analyze(state.bill);const d={result,packet:createPacket(result)};state.packet=d.packet;render();toast('Verified template restored.');});
+  const pdf=document.querySelector('#download-pdf');if(pdf)pdf.onclick=()=>busy(pdf,async()=>{const edited=document.querySelector('#letter').value;const original=createPacket(analyze(state.bill));const note=edited===original.letter?original.validation:'User-edited inquiry. Changes to the verified template have not been automatically validated.';const data=await pdfDocument('Your billing inquiry packet',[note,...edited.split('\n\n'),'Phone checklist',...original.checklist.map((x,i)=>`${i+1}. ${x}`)]);download(new Blob([data],{type:'application/pdf'}),'bill-buster-inquiry.pdf');toast('Your PDF packet is ready.');});
   const copy=document.querySelector('#copy-letter');if(copy)copy.onclick=()=>busy(copy,async()=>{try{await navigator.clipboard.writeText(document.querySelector('#letter').value);toast('Letter copied.');}catch{document.querySelector('#letter').select();toast('Copy access is unavailable. The letter is selected; press ⌘C or Ctrl+C.');}});
   const text=document.querySelector('#download-text');if(text)text.onclick=()=>download(new Blob([(state.packet.edited?'User-edited letter; changes have not been automatically validated.\n\n':'')+document.querySelector('#letter').value+'\n\nPHONE CHECKLIST\n'+state.packet.checklist.map((x,i)=>`${i+1}. ${x}`).join('\n')],{type:'text/plain;charset=utf-8'}),'bill-buster-inquiry.txt');
   const restart=document.querySelector('#restart');if(restart)restart.onclick=()=>{if(window.confirm('Start a new review? Download your current packet first if you want to keep it.')){Object.assign(state,{bill:null,result:null,packet:null,extraction:'',method:''});navigate(1);}};
