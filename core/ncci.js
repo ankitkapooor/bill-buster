@@ -55,7 +55,7 @@ export function assessPTP(bill,refs) {
         review?'CMS modifier indicator 1: a possible exception modifier is present. Clinical documentation must establish whether separate billing is appropriate.':
         'CMS modifier indicator 1: a clinically appropriate PTP-associated modifier may permit separate billing; none establishing a possible exception was identified. Modifiers 76/77 alone do not bypass PTP edits.';
       const detail=`${rule.column2} (column 2, lines ${second.join(', ')}) is paired with ${rule.column1} (column 1, lines ${first.join(', ')}) on ${group.date} for the same billing provider. ${meaning}`;
-      const item={id:`PTP-${rule.column1}-${rule.column2}-${ids.join('-')}`,kind:'bundling',status:group.status,lines:ids,
+      const item={id:`PTP-${rule.column1}-${rule.column2}-${ids.join('-')}`,kind:'bundling',status:group.status,lines:ids,column1:rule.column1,column2:rule.column2,
         title:review?`Confirm the modifier exception for ${pair}`:`Could ${pair} include a bundled charge?`,detail,
         question:review?`For ${group.date}, please confirm the documentation supporting the modifier exception and separate billing of ${rule.column1} (lines ${first.join(', ')}) and ${rule.column2} (lines ${second.join(', ')}). The Medicare hospital PTP reference allows exceptions only when clinically appropriate.`:
           `For ${group.date}, please explain why ${rule.column2} (column 2, lines ${second.join(', ')}) was billed separately with ${rule.column1} (column 1, lines ${first.join(', ')}), given the active Medicare hospital NCCI PTP edit with modifier indicator ${rule.modifier_indicator}, and provide any supporting documentation.`,

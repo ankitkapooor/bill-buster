@@ -24,9 +24,10 @@ export function validateNarrative(value,result) {
     return text.trim();
   }
   const seen=new Set();
+  const patientProse=(text,max,requireFirstPerson=false)=>{const clean=prose(text,max);if((requireFirstPerson&&!/\b(I|my|me)\b/i.test(clean))||/\b(?:the|a|your) patient\b|\byour (?:bill|charges|insurer|insurance|claim)\b|\byou (?:should|need to|may want to|(?:can|could|might) (?:ask|contact|request|send this|use this))\b|\bask (?:the )?(?:hospital|facility|billing)\b|\bthe (?:hospital|facility|billing office) should\b/i.test(clean))throw new Error('Draft must be written by the patient to the facility');return clean;};
   const requests=value.requests.map(r=>{
     if(!r||!ids.has(r.finding_id)||seen.has(r.finding_id))throw new Error('Unknown or duplicate finding');
-    seen.add(r.finding_id);return {finding_id:r.finding_id,explanation:prose(r.explanation,420),request:prose(r.request,420)};
+    seen.add(r.finding_id);return {finding_id:r.finding_id,explanation:patientProse(r.explanation,420),request:patientProse(r.request,420)};
   });
-  return {opening:prose(value.opening,500),closing:prose(value.closing,500),requests};
+  return {opening:patientProse(value.opening,500,true),closing:patientProse(value.closing,500,true),requests};
 }

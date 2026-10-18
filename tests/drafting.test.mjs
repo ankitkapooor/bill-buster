@@ -5,7 +5,7 @@ import {analyze} from '../core/engine.js';
 import {SAMPLE} from '../core/documents.js';
 import {draftFacts,validateNarrative} from '../core/drafting.js';
 const result=analyze(SAMPLE);
-const narrative=()=>({opening:'Please review the outpatient charges and provide a written explanation.',closing:'Thank you for reviewing these questions and explaining any resulting adjustments.',requests:draftFacts(result).findings.map(f=>({finding_id:f.id,explanation:f.kind==='duplicate'?'Matching bill entries may represent a repeated charge or separate services.':f.kind==='units'?'The units shown differ from the published reference and need clarification.':'The paired services appear in a published bundling edit and need review.',request:f.kind==='duplicate'?'Please identify the separate service or explain whether a duplicate charge needs correction.':f.kind==='units'?'Please explain the billed units and provide documentation for any applicable exception.':'Please explain the separate billing and provide documentation for any applicable exception.'}))});
+const narrative=()=>({opening:'Please review my outpatient charges and provide me with a written explanation.',closing:'Thank you for reviewing my questions and explaining any resulting adjustments to me.',requests:draftFacts(result).findings.map(f=>({finding_id:f.id,explanation:f.kind==='duplicate'?'Matching entries on my bill may represent a repeated charge or separate services.':f.kind==='units'?'The units shown on my bill differ from the published reference and need clarification.':'The paired services on my bill appear in a published bundling edit and need review.',request:f.kind==='duplicate'?'Please identify the separate service or explain whether my duplicate charge needs correction.':f.kind==='units'?'Please explain my billed units and provide documentation for any applicable exception.':'Please explain my separate charges and provide me with documentation for any applicable exception.'}))});
 const response=value=>Response.json({status:'completed',output:[{content:[{type:'output_text',text:JSON.stringify(value)}]}]});
 test('no key preserves usable template without an API call',async()=>{
   let calls=0;const output=await generateDraft(result,{},async()=>{calls++;});
@@ -18,7 +18,7 @@ test('Responses structured drafting is server-side and preserves all facts and e
     calls++;assert.equal(url,'https://api.openai.com/v1/responses');assert.equal(options.headers.Authorization,'Bearer test-only-secret');
     const request=JSON.parse(options.body);assert.equal(request.store,false);assert.equal(request.model,'gpt-5.4-mini');assert.equal(request.text.format.strict,true);assert.equal(request.text.format.type,'json_schema');
     for(const privateText of ['PRIVATE DESCRIPTION','PRIVATE PROVIDER','PRIVATE PAYER'])assert.ok(!request.input.includes(privateText));
-    assert.deepEqual(JSON.parse(request.input),draftFacts(r));
+    assert.deepEqual(JSON.parse(request.input),draftFacts(r));assert.match(request.instructions,/AS THE PATIENT/);
     return response(narrative());
   });
   assert.equal(calls,1);assert.equal(output.mode,'ai');assert.equal(output.packet.mode,'ai');
@@ -48,4 +48,8 @@ test('Worker rejects cross-origin, invalid, oversized and unthrottled requests',
   assert.equal((await worker.fetch(request(),{OPENAI_API_KEY:'fake'})).status,503);
   assert.equal((await worker.fetch(request(),{OPENAI_API_KEY:'fake',AI_RATE_LIMITER:{limit:async()=>({success:false})}})).status,429);
   assert.equal((await worker.fetch(new Request('https://billbuster.ankitkapoor.me/api/draft'),{})).status,405);
+});
+
+test('AI wording addressed to the user or written as an adviser is rejected',async()=>{
+  for(const patch of [{opening:'You should ask the hospital to review your bill.'},{closing:'The patient should contact the facility about their charges.'},{requests:narrative().requests.map(r=>({...r,explanation:'Your bill may contain errors that you should ask the hospital to review.'}))}]){const value={...narrative(),...patch};assert.throws(()=>validateNarrative(value,result));assert.equal((await generateDraft(result,{OPENAI_API_KEY:'fake'},async()=>response(value))).mode,'template');}
 });

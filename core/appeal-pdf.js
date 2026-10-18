@@ -34,7 +34,7 @@ export async function appealPDF(result,draft,options={}) {
     const ref=pdf.context.register(pdf.context.obj({Type:'Annot',Subtype:'Link',Rect:rect,Border:[0,0,0],...action}));
     const annotations=page.node.Annots();if(annotations)annotations.push(ref);else page.node.set(PDFName.of('Annots'),pdf.context.obj([ref]));
   }
-  function flow(text,{font=regular,size=10,leading=14.5,color=ink,gap=10,keep=true,x=48,width=516}={}) {
+  function flow(text,{font=regular,size=10,leading=14.5,color=ink,gap=8,keep=true,x=48,width=516}={}) {
     const lines=wrap(text,font,size,width);
     if(keep&&lines.length*leading<590)ensure(lines.length*leading+gap);
     for(const rendered of lines) {
@@ -66,8 +66,10 @@ export async function appealPDF(result,draft,options={}) {
     for(const [id,alias] of aliases)paragraph=paragraph.replaceAll(id,alias);
     if(/^\d\. [A-Z ]+$/.test(paragraph.trim()))heading(paragraph);
     else if(/^\d+\. /.test(paragraph)) {
-      const [title,...body]=paragraph.split('\n');ensure(65);flow(title,{font:bold,size:10,gap:5});flow(body.join('\n'),{size:9.5,leading:14,gap:15});
-    } else flow(paragraph,{size:9.5,leading:14});
+      const [title,...body]=paragraph.split('\n'),text=body.join('\n');
+      const height=wrap(title,bold,10).length*13.5+4+wrap(text,regular,9.5).length*13.5+12;
+      ensure(Math.min(height,590));flow(title,{font:bold,size:10,leading:13.5,gap:4});flow(text,{size:9.5,leading:13.5,gap:12});
+    } else flow(paragraph,{size:9.5,leading:13.5});
   }
   addPage('APPENDIX A / EVIDENCE');heading('APPENDIX A. SUPPORTING EVIDENCE');
   flow('The references below explain the questions raised. Medicare coding edits are reference rules; confirm applicability with the hospital and insurer. Hospital prices do not establish patient responsibility.',{size:9.5,color:muted,gap:18});

@@ -32,7 +32,7 @@ The sample charges are invented. References are real, extracted from the supplie
 - Prices match facility, outpatient/both, unmodified CPT/HCPCS codes across all code columns. Distinct gross/cash prices remain unresolved; negotiated amounts require exact payer and plan. Formula-only rates stay unknown. Confirm the service-unit basis with billing. Data vintage is not proof of the applicable service-date rate.
 - Unknown code/date/units/amount does not receive a false all-clear. Dates outside the quarter do not use Q3 references. Unsupported hospitals and settings are rejected.
 - Template letters use only confirmed lines and cited findings. A source-ID invariant verifies generated citations. User edits are labeled unvalidated and preserved on export. PDF uses a standard Western font; an explanatory note appears if unsupported characters must be replaced. Text export preserves all characters.
-- Synthetic documents only: no scans, EOB processing, automatic sending, stored reviews or savings calculations. Optional LLM wording remains subject to user review; its figures and citations are inserted by code.
+- Synthetic documents only: no scans, EOB processing, automatic sending or stored reviews. Conditional bill-reduction scenarios are distinct from approved adjustments or patient savings. Optional LLM wording remains subject to user review; its figures and citations are inserted by code.
 
 ## API setup
 
@@ -40,7 +40,7 @@ There was no LLM in the original implementation. Optional server-side drafting i
 
 **Cloudflare Dashboard → Workers & Pages → bill-buster → Settings → Variables and Secrets → Add → Type: Secret → Variable name: OPENAI_API_KEY → paste key in Value → Deploy.** Refresh the website to enable **Refine with AI** on the packet screen. Full details and local setup: [docs/API-SETUP.md](docs/API-SETUP.md). `.env.example` points to this setup; Wrangler local development reads the ignored `.dev.vars` file.
 
-The LLM helps explain each finding and formulate a documentation request. Coding checks and price comparisons remain deterministic. An unavailable or rejected AI response preserves the template. Tests use mocked API responses; a real model call has not been made because the user will supply the key manually.
+The LLM helps explain each finding and formulate a documentation request. Coding checks and price comparisons remain deterministic. An unavailable or rejected AI response preserves the template. Automated tests use mocked API responses. The user manually configured the Worker secret, and live synthetic AI refinement has been verified without exposing the key.
 
 ## Sources
 
@@ -60,7 +60,7 @@ npm run check
 npm run build
 ```
 
-The 64 tests include 20 original statement-bank tests, 6 compound-statement/PDF tests, 6 AI drafting/Worker tests, 17 dedicated NCCI tests, and 15 workflow tests: ten PDF-to-packet runs, clean bills, repeats, provider separation, MUE indicator logic, quarter boundaries, exact plan matching, ambiguous prices, missing fields, input rejection and output citations. They do not establish the PRD’s independent 30-bill/coder evaluation or real-world accuracy.
+The 78 tests include 20 original statement-bank tests, 6 compound-statement/PDF tests, 7 AI drafting/Worker tests, 13 pricing/scenario tests, 17 dedicated NCCI tests, and 15 workflow tests: ten PDF-to-packet runs, clean bills, repeats, provider separation, MUE indicator logic, quarter boundaries, exact plan matching, ambiguous prices, missing fields, input rejection and output citations. They do not establish the PRD’s independent 30-bill/coder evaluation or real-world accuracy.
 
 ## Deployment
 
@@ -95,3 +95,11 @@ The standalone archive is also written to `output/pdf/bill-bank/bill-buster-20-b
 BB-21 combines a repeated CBC, excess panel/administration units and two NCCI pairs. BB-22 adds split same-day unit aggregation. BB-23 tests a possible modifier exception alongside a non-bypassable edit. BB-24 has three overlapping PTP pairs. BB-25 retains known questions while leaving unknown charges, unsupported codes and October rules unassessed. All five contain duplicate, MUE and NCCI questions.
 
 `fixtures/compound-bills/cases.json` is the authored answer key; tests compare all visible fields and all four line-check statuses after PDF extraction. `scripts/create_compound_bills.py` regenerates the five statements and sets `data/sample.json` to BB-21. Build copies the actual BB-21 statement to `/sample-bill.pdf`. The landing illustration, built-in demo and downloadable sample therefore use the same bill. `/test-bills/BB-21-inquiry-example.pdf` is a verified-template example of the professional export; no AI response is simulated as a live result.
+
+## Review amounts, price explanations and letter perspective
+
+Every review shows the starting bill and a **potential reduced bill**, explicitly marked **scenario, not approved**. For BB-21: $4,775 starting, $3,018 conditional reduced amount, $1,757 conditional reduction. The calculation removes later duplicate occurrences and flagged NCCI column-two charges, then caps remaining flagged unit groups at their published MUE. Unit reductions prorate the original billed charge; hospital reference prices do not determine the scenario. Duplicate/bundling removals happen before units are recomputed, preventing overlapping deductions. Modifier reviews do not reduce the bill. Missing charges keep the reduced total unknown; clean bills show zero identified reduction. This does not establish an insurer allowance or patient liability. The review exposes line-by-line adjustments and assumptions.
+
+Each missing price has a field-specific reason: no matching source record, multiple possible prices (with candidate unit prices), missing payer/plan, no exact plan match, unpublished dollar value, formula-only rate, unsupported modifier, missing bill data or dates outside coverage. Medicare reimbursement is not calculated. These price gaps do not disable coding checks.
+
+Both the deterministic letter and AI drafting instructions use the patient's first-person voice addressed to the outpatient billing facility. AI output written as advice to the patient is rejected, retaining the usable template. The PDF and text exports preserve that voice and the linked evidence.

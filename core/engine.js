@@ -1,5 +1,7 @@
 import references from '../data/references.json' with { type: 'json' };
 import { assessPTP } from './ncci.js';
+import { assessPrice } from './pricing.js';
+import { reductionScenario } from './reduction.js';
 export const REFERENCES = references;
 export class BillError extends Error {}
 export const DISCLAIMER = 'Questions to discuss with billing, not a determination of an error. Medicare coding references may not apply to your plan. Published prices do not establish patient responsibility or savings.';
@@ -7,7 +9,6 @@ const REPEAT = new Set(['76','77','91']);
 const money = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
 const empty = x => x === '' || x == null;
 const cents = n => Math.round(n * 100);
-const same = (a,b) => a.localeCompare(b, 'en', {sensitivity:'accent'}) === 0;
 
 export function validate(raw) {
   if (!raw || !Array.isArray(raw.lines) || raw.lines.length<1 || raw.lines.length>50) throw new BillError('Add between 1 and 50 bill lines.');
@@ -58,32 +59,16 @@ export function analyze(raw, refs=REFERENCES) {
         const ids=rule.indicator===1?[lid]:group.map(x=>x.id),basis=rule.indicator===1?'per claim line':'per date of service and provider';
         const meaning={1:'A claim-line edit; appropriate modifiers can affect reporting.',2:'A date-of-service policy edit.',3:'A date-of-service clinical edit; documentation may support an exception on review.'}[rule.indicator];
         findings.push({id:`MUE-${lid}`,kind:'units',title:`Ask about the units for ${code}`,lines:ids,
-          detail:`${total} units on ${line.date}; Medicare's published outpatient limit is ${rule.limit} ${basis}.`,
+          unit_limit:rule.limit,unit_indicator:rule.indicator,detail:`${total} units on ${line.date}; Medicare's published outpatient limit is ${rule.limit} ${basis}.`,
           question:`For code ${code} on ${line.date} (lines ${ids.join(', ')}), please explain the ${total} units billed against the Medicare outpatient MUE reference of ${rule.limit}, including any supporting documentation or applicable exceptions.`,
           evidence:[{id:`MUE-Q3-2026-${code}`,label:`CMS outpatient MUE · 2026 Q3 · code ${code}`,detail:`Source CSV record ${rule.row}; limit ${rule.limit}; adjudication indicator ${rule.indicator}; rationale: ${rule.rationale}. ${meaning} Medicare reference only; confirm applicability with your insurer.`,url:refs.sources.mue.url}]});
       }
     }
-    const records=refs.prices[code]??[];
-    const price={line:lid,code,billed:line.amount,units:line.units,status:'unable',gross:null,cash:null,negotiated:null,evidence:[],note:''};
-    if(!inPeriod||!code||line.units==null||line.amount==null||line.modifiers)price.note='Unable to assess: date, code, units, amount or modifier is outside supported price matching.';
-    else {
-      const uniquePrice=(field,candidates)=>{
-        const available=candidates.filter(r=>r[field]!=null),values=new Set(available.map(r=>r[field]));
-        if(values.size!==1)return null;
-        for(const r of available)price.evidence.push({id:`KECK-${r.record}`,label:`Keck MRF · CSV record ${r.record}`,
-          detail:`${code} (${r.code_type}), facility/${r.setting}, unmodified; ${field} ${money(r[field])} per published service unit. File dated ${refs.price_date}.`+(r.payer?` ${r.payer} / ${r.plan}.`:''),url:refs.sources.prices.url});
-        const unit=[...values][0];return {unit,total:cents(unit*line.units)/100};
-      };
-      price.gross=uniquePrice('gross',records);price.cash=uniquePrice('cash',records);
-      price.negotiated=uniquePrice('negotiated',records.filter(r=>bill.payer&&bill.plan&&same(r.payer,bill.payer)&&same(r.plan,bill.plan)));
-      price.status=price.gross||price.cash||price.negotiated?'context':'unable';
-      price.note='Published service-unit prices scaled by confirmed bill units. Multiple CDM prices, missing amounts and algorithm-only rates are not resolved. Negotiated price requires an exact payer and plan match. File vintage does not prove the price applied on the service date.';
-    }
-    price.evidence=[...new Map(price.evidence.map(e=>[e.id+e.detail,e])).values()];prices.push(price);
+    const price=assessPrice(line,bill,refs);prices.push(price);
     checks.push({line:lid,check:'price',status:price.status,detail:price.note});
   }
   const ptp=assessPTP(bill,refs);findings.push(...ptp.findings);checks.push(...ptp.checks);
-  return {bill,findings,modifier_reviews:ptp.modifier_reviews,checks,prices,disclaimer:DISCLAIMER,quarter:refs.quarter,price_date:refs.price_date,total:bill.lines.reduce((sum,x)=>sum+cents(x.amount??0),0)/100,amount_complete:bill.lines.every(x=>x.amount!=null),unable_count:checks.filter(x=>x.status==='unable').length,check_count:checks.length};
+  return {bill,findings,modifier_reviews:ptp.modifier_reviews,checks,prices,reduction:reductionScenario(bill,findings),disclaimer:DISCLAIMER,quarter:refs.quarter,price_date:refs.price_date,total:bill.lines.reduce((sum,x)=>sum+cents(x.amount??0),0)/100,amount_complete:bill.lines.every(x=>x.amount!=null),unable_count:checks.filter(x=>x.status==='unable').length,check_count:checks.length};
 }
 
 export const CHECKLIST=[
@@ -97,7 +82,7 @@ export const CHECKLIST=[
 
 export function packet(result,narrative=null) {
   const citations=new Map(),paragraphs=['To: Billing Review Department, Keck Hospital of USC','Re: Request for review of itemized outpatient facility charges','Dear Billing Review Team,',
-    '1. PURPOSE OF THIS REQUEST',narrative?.opening??'I am requesting a written review of the itemized outpatient facility charges identified below. Please clarify how these services were billed and provide any supporting documentation. These are questions for review, not a determination that a charge is incorrect.',
+    '1. PURPOSE OF THIS REQUEST',narrative?.opening??'I am writing to request a review of my itemized outpatient facility bill. I have identified the questions below and would appreciate your explanation and supporting documentation. If your review identifies an incorrect charge, please correct my bill and send me an updated statement.',
     '2. ITEMS REQUIRING CLARIFICATION'];
   function cite(e) {
     const previous=citations.get(e.id);
@@ -107,20 +92,25 @@ export function packet(result,narrative=null) {
   for(const finding of [...result.findings,...(result.modifier_reviews??[])]) {
     finding.evidence.forEach(cite);index++;
     const ai=narrative?.requests.find(r=>r.finding_id===finding.id);
-    paragraphs.push(`${index}. ${finding.title}\n${ai?`${finding.detail}\n${ai.explanation}\nRequested clarification: ${ai.request}`:finding.question} [${finding.evidence.map(e=>e.id).join('; ')}]`);
+    const title=finding.kind==='duplicate'?'Repeated charges on my bill':finding.kind==='units'?`My billed units for ${result.bill.lines.find(l=>l.id===finding.lines[0]).code}`:`${finding.status==='review'?'Modifier documentation for my bill':'My separately billed services'}: ${finding.column1} / ${finding.column2}`;
+    const patientQuestion=finding.kind==='duplicate'?finding.question.replace('could you confirm whether','could you confirm whether my charge on'):
+      finding.kind==='units'?finding.question.replace('please explain the','please explain why my bill lists'):
+      finding.status==='review'?finding.question.replace('please confirm the documentation','please provide me with the documentation'):
+      finding.question.replace('please explain why','please explain why I was billed for').replace('was billed separately with','separately from');
+    paragraphs.push(`${index}. ${title}\n${ai?`${finding.detail}\n${ai.explanation}\nRequested clarification: ${ai.request}`:patientQuestion} [${finding.evidence.map(e=>e.id).join('; ')}]`);
   }
-  if(!result.findings.length&&!result.modifier_reviews?.length)paragraphs.push('The limited prototype checks did not identify a coding question. Please explain any charges I ask about; this review does not establish that the entire bill is correct.');
+  if(!result.findings.length&&!result.modifier_reviews?.length)paragraphs.push('My limited review did not identify a specific coding question. I would still appreciate an explanation of the itemized charges, and I understand that this does not establish that every charge is correct.');
   paragraphs.push('3. PUBLISHED PRICE CONTEXT');
   for(const p of result.prices.filter(p=>p.status==='context')) {
     const values=[['gross','published gross'],['cash','discounted cash'],['negotiated','matched negotiated']].filter(([key])=>p[key]).map(([key,label])=>`${label} ${money(p[key].total)} for ${p.units} units`).join(', ');
     p.evidence.forEach(cite);
-    paragraphs.push(`For line ${p.line} (${p.code}), the bill shows ${money(p.billed)}. Keck's price file dated ${result.price_date} lists ${values}. Please clarify the applicable rate, service-unit basis, discounts and final patient responsibility. [${[...new Set(p.evidence.map(e=>e.id))].join('; ')}]`);
+    paragraphs.push(`For line ${p.line} (${p.code}), my bill lists ${money(p.billed)}. Your facility's published price file dated ${result.price_date} lists ${values}. Please explain which rate, service-unit basis and discounts apply to my charge, and how you calculated my patient responsibility. [${[...new Set(p.evidence.map(e=>e.id))].join('; ')}]`);
   }
-  paragraphs.push('4. REQUESTED RESPONSE',narrative?.closing??'Please provide a written explanation of the charges and any corrections resulting from your review. Please identify any additional documentation you need from me and the next step in the billing-review process. I will reconcile any insurer adjustments with my explanation of benefits.',
+  paragraphs.push('4. REQUESTED RESPONSE',narrative?.closing??'Please send me a written response addressing each question, the documentation supporting the charges, and an updated itemized statement if you make any corrections. Please let me know if you need further information from me and how I can follow up on this review. I will compare any insurer adjustments with my explanation of benefits.',
     '5. SCOPE OF THIS REVIEW');
-  if(result.unable_count)paragraphs.push(`This limited review could not assess ${result.unable_count} of ${result.check_count} line checks. Missing information and unsupported services have not been cleared.`);
-  paragraphs.push(result.disclaimer);
-  paragraphs.push('Yours sincerely,','[Your name and account reference - add privately before sending]');
+  if(result.unable_count)paragraphs.push(`I could not fully assess ${result.unable_count} of ${result.check_count} checks on my bill because information or applicable reference coverage was unavailable. Please help me clarify these remaining items.`);
+  paragraphs.push('I am raising these items as questions for your review, rather than asserting that a charge is incorrect. I understand that Medicare references may not apply to my claim and published hospital prices do not establish what I owe. Please confirm the rules and rates applicable to my services.');
+  paragraphs.push('Yours sincerely,\n[Your name and account reference - add privately before sending]');
   const letter=paragraphs.join('\n\n');
   const actual=new Set([...letter.matchAll(/\[((?:BILL|MUE|PTP|KECK)-[^\]]+)\]/g)].flatMap(m=>m[1].split(';').map(s=>s.trim())));
   if(actual.size!==citations.size||[...actual].some(id=>!citations.has(id)))throw new Error('The letter failed citation verification.');

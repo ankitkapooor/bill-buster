@@ -1,7 +1,7 @@
 import {analyze,packet} from '../core/engine.js';
 import {draftFacts,draftSchema,validateNarrative} from '../core/drafting.js';
 
-const instructions=`You help a patient write a professional, courteous request for review of a synthetic hospital bill. Use ONLY the supplied findings. Do not decide that a charge is wrong. Explain the reason for each question in accessible everyday language, then request the specific clarification or documentation relevant to that finding. Treat modifier reviews as possible valid exceptions. Do not invent services, medical necessity, patient history, payer coverage, legal rights, refunds, savings or deadlines. Do not suggest withholding payment. Do not repeat ANY numerals, codes, dates, amounts, citations or URLs in prose; deterministic code will insert those facts and evidence separately. Return exactly one request for every supplied finding ID. Keep each explanation and request brief. Opening and closing should request a written billing review and explanation, without making allegations. Return the required JSON structure.`;
+const instructions=`Write AS THE PATIENT, in the first person, directly TO THE OUTPATIENT FACILITY billing department. This is a professional letter I will send about my synthetic bill. Opening, closing and every request must use I, my or me. Explanations should refer to my bill or my charges. Never address me as the reader, advise me what to ask, refer to me as the patient, or narrate what the facility should do in the third person. Address the facility as you or your billing team when appropriate. Use ONLY the supplied findings. Do not decide that a charge is wrong. Explain the reason for each question in accessible everyday language, then request the specific clarification or documentation relevant to that finding. Treat modifier reviews as possible valid exceptions. Do not invent services, medical necessity, patient history, payer coverage, legal rights, refunds, savings or deadlines. Do not suggest withholding payment. Do not repeat ANY numerals, codes, dates, amounts, citations or URLs in prose; deterministic code will insert those facts and evidence separately. Return exactly one request for every supplied finding ID. Keep each explanation and request brief. Opening and closing should request a written billing review and explanation, without making allegations. Return the required JSON structure.`;
 function json(value,status=200) {return Response.json(value,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'}});}
 async function limitedBody(request) {
   if(Number(request.headers.get('content-length')??0)>65536)throw new Error('oversize');
@@ -12,7 +12,7 @@ async function limitedBody(request) {
   return JSON.parse(new TextDecoder().decode(all));
 }
 export async function generateDraft(result,env,fetcher=fetch) {
-  const fallback=reason=>({packet:packet(result),mode:'template',message:reason});
+  const fallback=(reason,reason_code)=>({packet:packet(result),mode:'template',message:reason,...(reason_code?{reason_code}:{})});
   if(!env.OPENAI_API_KEY)return fallback('AI drafting is awaiting setup. Your verified template is ready.');
   const facts=draftFacts(result);if(!facts.findings.length||facts.findings.length>14)return fallback('The verified template is the best fit for this review.');
   try {
@@ -24,7 +24,10 @@ export async function generateDraft(result,env,fetcher=fetch) {
     const text=(data.output??[]).flatMap(m=>m.content??[]).filter(c=>c.type==='output_text').map(c=>c.text).join('');
     const narrative=validateNarrative(JSON.parse(text),result);
     return {packet:packet(result,narrative),mode:'ai',message:'AI wording added. Confirmed figures and evidence are inserted by code; review the wording before sending.'};
-  } catch {return fallback('AI drafting could not be verified. The verified template has been retained.');}
+  } catch(error) {
+    const codes={'Draft must be written by the patient to the facility':'perspective','Incomplete draft':'missing_findings','Unsupported draft facts':'unsupported_facts','Unsupported assertion':'unsupported_assertion','Unknown or duplicate finding':'finding_ids','Incomplete response':'incomplete_response'};
+    return fallback('AI drafting could not be verified. The verified template has been retained.',codes[error.message]||'unverified_response');
+  }
 }
 export default {async fetch(request,env) {
   const url=new URL(request.url);

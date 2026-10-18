@@ -1,6 +1,6 @@
 # Add the OpenAI key manually
 
-The LLM integration is implemented. No API key has been added. Without one, the complete rule-based workflow and professional PDF work; **Refine with AI** stays disabled.
+The LLM integration is implemented, and the user has manually configured the hosted Worker secret. For a new deployment without a key, the complete rule-based workflow and professional PDF work; **Refine with AI** stays disabled.
 
 ## Hosted website — paste it here
 
@@ -30,6 +30,6 @@ Structured output is checked for complete finding IDs, duplicate/missing items, 
 
 ## Verification status
 
-Tests mock the OpenAI Responses API and check payloads, privacy filtering, fact preservation, failures and endpoint protection. A real model call cannot be verified until you add your key. Configuration status is available at `/api/status`; it reports only whether a key is present and the model name, never the secret or a successful billing/access check.
+Tests mock the OpenAI Responses API and check payloads, privacy filtering, fact preservation, failures and endpoint protection. Live synthetic refinement has also been verified against the hosted Worker after manual key setup. A new deployment still needs its own key and a successful end-to-end call. Configuration status is available at `/api/status`; it reports only whether a key is present and the model name, never the secret or a successful billing/access check.
 
 References: [Cloudflare Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/), [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses), [model](https://developers.openai.com/api/docs/models/gpt-5.4-mini).

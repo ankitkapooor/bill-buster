@@ -11,3 +11,7 @@
 .state.review{background:#e8eef8;color:#34577c}
 
 .ai-tools{padding:16px;border:1px solid var(--line);border-radius:9px;margin:16px 0}.ai-tools p{margin:10px 0 0}.ai-tools button:disabled{cursor:default}.receipt .micro{font-size:9px}
+
+.review-summary{grid-template-columns:repeat(4,minmax(0,1fr))}.review-summary .eyebrow{font-size:10px;letter-spacing:1px}.review-summary strong{font-size:30px;overflow-wrap:anywhere}.review-summary .reduced-summary{background:#eef3e6}.scenario-tag{display:inline-block;font-size:9px;font-weight:650;letter-spacing:.6px;color:#536e47;margin:0 0 10px}.reduction-detail{margin-top:-8px}.price-status{display:block;font-size:12px;font-weight:600;color:var(--muted)}.price-table .price-reason{font-size:11px;line-height:1.5;max-width:250px;white-space:normal}.price-table td{vertical-align:top}.review-summary p{line-height:1.5}
+@media(max-width:850px){.review-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.review-summary>div:nth-child(2){border-right:0}.review-summary>div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media(max-width:620px){.review-summary strong{font-size:24px}.review-summary .eyebrow{font-size:9px}.price-table .price-reason{min-width:150px}.reduction-detail summary{font-size:12px}}
