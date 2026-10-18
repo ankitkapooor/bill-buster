@@ -1,9 +1,37 @@
 {
   "name": "bill-buster",
   "account_id": "2aa82d87fe21472b7c89953238f0cf6f",
-  "compatibility_date": "2026-10-17",
-  "assets": { "directory": "./dist", "not_found_handling": "404-page" },
-  "routes": [ { "pattern": "billbuster.ankitkapoor.me", "custom_domain": true } ],
+  "compatibility_date": "2026-09-17",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "routes": [
+    {
+      "pattern": "billbuster.ankitkapoor.me",
+      "custom_domain": true
+    }
+  ],
   "workers_dev": true,
-  "observability": { "enabled": false }
+  "observability": {
+    "enabled": false
+  },
+  "main": "worker/index.js",
+  "vars": {
+    "OPENAI_MODEL": "gpt-5.4-mini"
+  },
+  "ratelimits": [
+    {
+      "name": "AI_RATE_LIMITER",
+      "namespace_id": "1826101801",
+      "simple": {
+        "limit": 5,
+        "period": 60
+      }
+    }
+  ]
 }
