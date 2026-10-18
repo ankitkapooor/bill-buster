@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {analyze,validate,packet,REFERENCES,BillError} from '../core/engine.js';
-import {SAMPLE,samplePDF,extractPDF,pdfDocument} from '../core/documents.js';
+import {SAMPLE,samplePDF,extractPDF,pdfDocument,appealPDF} from '../core/documents.js';
 import {getDocumentProxy,extractText} from 'unpdf';
-const sample=()=>structuredClone(SAMPLE);
+const baseline=JSON.parse(await readFile(new URL('../fixtures/workflow-baseline.json',import.meta.url)));
+const sample=()=>structuredClone(baseline);
 const questions=(bill,kind,refs)=>analyze(bill,refs).findings.filter(f=>f.kind===kind);
 
 test('ten complete synthetic PDF-to-packet runs',async()=>{
@@ -13,12 +14,12 @@ test('ten complete synthetic PDF-to-packet runs',async()=>{
     const extracted=await extractPDF(source.slice());
     assert.deepEqual(validate(extracted.bill),validate(SAMPLE));
     const result=analyze(extracted.bill),draft=packet(result);
-    assert.deepEqual(result.findings.map(f=>[f.kind,f.lines]),[['duplicate',[2,4]],['units',[5]],['bundling',[5,6]]]);
-    assert.equal(result.total,2687);
-    assert.match(draft.letter,/\[BILL-2-4\]/);assert.match(draft.letter,/\[MUE-Q3-2026-80053\]/);
-    const pdf=await pdfDocument('Your billing inquiry packet',[draft.validation,...draft.letter.split('\n\n'),'Phone checklist',...draft.checklist]);
+    assert.deepEqual(result.findings.map(f=>[f.kind,f.lines]),[['duplicate',[2,3]],['units',[4]],['units',[7]],['bundling',[4,5]],['bundling',[6,7]]]);
+    assert.equal(result.total,4775);
+    assert.match(draft.letter,/\[BILL-2-3\]/);assert.match(draft.letter,/\[MUE-Q3-2026-80053\]/);
+    const pdf=await appealPDF(result,draft);
     const content=await extractText(pdf.slice(),{mergePages:true});
-    assert.match(content.text,/MUE-Q3-2026-80053/);assert.match(content.text,/Phone checklist/);
+    assert.match(content.text,/MUE-Q3-2026-80053/);assert.match(content.text,/FOLLOW-UP CALL CHECKLIST/);
     assert.match(content.text,/PTP-Q3-2026-80053-80048/);
     if(i===0){await mkdir('output',{recursive:true});await writeFile('output/synthetic-bill.pdf',source);await writeFile('output/inquiry-packet.pdf',pdf);}
   }

@@ -95,24 +95,35 @@ export const CHECKLIST=[
   'Write down the next step, who owns it and when to follow up.'
 ];
 
-export function packet(result) {
-  const citations=new Map(),paragraphs=['To: Keck Hospital of USC billing office','Subject: Request for clarification of itemized outpatient charges','Hello,','Please help me understand the following charges on my outpatient facility bill. These are questions for review, not a claim that a charge is incorrect.'];
+export function packet(result,narrative=null) {
+  const citations=new Map(),paragraphs=['To: Billing Review Department, Keck Hospital of USC','Re: Request for review of itemized outpatient facility charges','Dear Billing Review Team,',
+    '1. PURPOSE OF THIS REQUEST',narrative?.opening??'I am requesting a written review of the itemized outpatient facility charges identified below. Please clarify how these services were billed and provide any supporting documentation. These are questions for review, not a determination that a charge is incorrect.',
+    '2. ITEMS REQUIRING CLARIFICATION'];
+  function cite(e) {
+    const previous=citations.get(e.id);
+    citations.set(e.id,previous?!previous.detail.includes(e.detail)?{...previous,detail:previous.detail+' '+e.detail}:previous:e);
+  }
+  let index=0;
   for(const finding of [...result.findings,...(result.modifier_reviews??[])]) {
-    finding.evidence.forEach(e=>citations.set(e.id,e));
-    paragraphs.push(`${finding.question} [${finding.evidence.map(e=>e.id).join('; ')}]`);
+    finding.evidence.forEach(cite);index++;
+    const ai=narrative?.requests.find(r=>r.finding_id===finding.id);
+    paragraphs.push(`${index}. ${finding.title}\n${ai?`${finding.detail}\n${ai.explanation}\nRequested clarification: ${ai.request}`:finding.question} [${finding.evidence.map(e=>e.id).join('; ')}]`);
   }
   if(!result.findings.length&&!result.modifier_reviews?.length)paragraphs.push('The limited prototype checks did not identify a coding question. Please explain any charges I ask about; this review does not establish that the entire bill is correct.');
+  paragraphs.push('3. PUBLISHED PRICE CONTEXT');
   for(const p of result.prices.filter(p=>p.status==='context')) {
     const values=[['gross','published gross'],['cash','discounted cash'],['negotiated','matched negotiated']].filter(([key])=>p[key]).map(([key,label])=>`${label} ${money(p[key].total)} for ${p.units} units`).join(', ');
-    p.evidence.forEach(e=>citations.set(e.id,e));
+    p.evidence.forEach(cite);
     paragraphs.push(`For line ${p.line} (${p.code}), the bill shows ${money(p.billed)}. Keck's price file dated ${result.price_date} lists ${values}. Please clarify the applicable rate, service-unit basis, discounts and final patient responsibility. [${[...new Set(p.evidence.map(e=>e.id))].join('; ')}]`);
   }
+  paragraphs.push('4. REQUESTED RESPONSE',narrative?.closing??'Please provide a written explanation of the charges and any corrections resulting from your review. Please identify any additional documentation you need from me and the next step in the billing-review process. I will reconcile any insurer adjustments with my explanation of benefits.',
+    '5. SCOPE OF THIS REVIEW');
   if(result.unable_count)paragraphs.push(`This limited review could not assess ${result.unable_count} of ${result.check_count} line checks. Missing information and unsupported services have not been cleared.`);
-  paragraphs.push('Please provide an itemized explanation and any corrections in writing. I will confirm any insurer adjustments against my explanation of benefits.','Thank you,','[Your name and account reference — add privately before sending]','Evidence');
-  for(const [id,e] of citations)paragraphs.push(`[${id}] ${e.label}. ${e.detail}${e.url?' '+e.url:''}`);
   paragraphs.push(result.disclaimer);
+  paragraphs.push('Yours sincerely,','[Your name and account reference - add privately before sending]');
   const letter=paragraphs.join('\n\n');
   const actual=new Set([...letter.matchAll(/\[((?:BILL|MUE|PTP|KECK)-[^\]]+)\]/g)].flatMap(m=>m[1].split(';').map(s=>s.trim())));
   if(actual.size!==citations.size||[...actual].some(id=>!citations.has(id)))throw new Error('The letter failed citation verification.');
-  return {letter,checklist:CHECKLIST,validation:'Verified template: all generated figures and citations come from confirmed lines and local references.'};
+  return {letter,evidence:[...citations.values()],checklist:CHECKLIST,mode:narrative?'ai':'template',
+    validation:narrative?'AI-assisted wording; figures and citations inserted by code. Review the wording before sending.':'Verified template: figures and citations come from confirmed lines and local references.'};
 }

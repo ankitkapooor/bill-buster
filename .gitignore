@@ -9,3 +9,6 @@ output/
 .DS_Store
 dist/
 .wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example

@@ -1,0 +1,3 @@
+# For LOCAL Wrangler development only. Copy to .dev.vars and paste your key.
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5.4-mini

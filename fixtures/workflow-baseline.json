@@ -1,0 +1,62 @@
+{
+  "hospital": "Keck Hospital of USC",
+  "setting": "outpatient",
+  "payer": "Medicare",
+  "plan": "",
+  "lines": [
+    {
+      "code": "99284",
+      "description": "Emergency visit",
+      "units": 1,
+      "amount": 1850,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "Keck facility"
+    },
+    {
+      "code": "85025",
+      "description": "Blood count",
+      "units": 1,
+      "amount": 212,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "Keck facility"
+    },
+    {
+      "code": "36415",
+      "description": "Blood draw",
+      "units": 1,
+      "amount": 48,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "Keck facility"
+    },
+    {
+      "code": "85025",
+      "description": "Blood count",
+      "units": 1,
+      "amount": 212,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "Keck facility"
+    },
+    {
+      "code": "80053",
+      "description": "Metabolic panel",
+      "units": 2,
+      "amount": 240,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "Keck facility"
+    },
+    {
+      "code": "80048",
+      "description": "Basic metabolic panel",
+      "units": 1,
+      "amount": 125,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "Keck facility"
+    }
+  ]
+}

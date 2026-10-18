@@ -77,5 +77,5 @@ test('all duplicate occurrences of a code pair are cited in one grouped question
 });
 test('PTP source IDs survive the inquiry validator',()=>{
   const r=analyze(bill()),draft=packet(r);assert.match(draft.letter,/\[PTP-Q3-2026-80053-80048-213077\]/);
-  assert.match(draft.letter,/source line 213077/);
+  assert.ok(draft.evidence.some(e=>e.detail.includes('source line 213077')));
 });

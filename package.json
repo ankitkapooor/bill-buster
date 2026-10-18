@@ -8,7 +8,7 @@
     "dev": "npm run build && wrangler dev --port 8001",
     "deploy": "npm run build && wrangler deploy",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check static/app.js && node --check core/engine.js && node --check core/documents.js && node --check core/ncci.js"
+    "check": "node --check static/app.js && node --check core/engine.js && node --check core/documents.js && node --check core/ncci.js && node --check core/appeal-pdf.js && node --check core/drafting.js && node --check worker/index.js"
   },
   "dependencies": {
     "pdf-lib": "1.17.1",

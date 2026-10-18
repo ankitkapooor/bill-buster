@@ -123,8 +123,9 @@ def draw_bill(case,path):
  for x,label in [(42,'No.'),(62,'Date of service'),(126,'CPT / HCPCS'),(184,'Description'),(341,'Units'),(376,'Charges'),(447,'Mod.'),(492,'Provider')]:
   text(x,487,label,7,True,HexColor('#ffffff'))
  y=457
+ row_height=min(29,152/len(case['bill']['lines'])) if len(case['bill']['lines'])>5 else 29
  for index,l in enumerate(case['bill']['lines'],1):
-  if index%2==0:c.setFillColor(pale);c.rect(36,y-11,540,29,fill=1,stroke=0)
+  if index%2==0:c.setFillColor(pale);c.rect(36,y-7 if row_height<29 else y-11,540,row_height,fill=1,stroke=0)
   text(42,y,f'{index:02}',8)
   text(62,y,l['date'],8)
   text(126,y,l['code'] or '-',8,True)
@@ -133,7 +134,7 @@ def draw_bill(case,path):
   right(433,y,'-' if l['amount'] is None else f"${l['amount']:,.2f}",8)
   text(447,y,l['modifiers'] or '-',8)
   text(492,y,l['provider'],8)
-  y-=29
+  y-=row_height
  hline(y+13)
  total=sum(round((l['amount'] or 0)*100) for l in case['bill']['lines'])/100
  complete=all(l['amount'] is not None for l in case['bill']['lines'])
@@ -212,7 +213,8 @@ def create(source=None):
  (PUBLIC/'catalog.json').write_text(json.dumps([dict(id=c['id'],pdf=c['pdf'],lines=len(c['bill']['lines']),date=min(l['date'] for l in c['bill']['lines'])) for c in cases],indent=2)+'\n')
  archive=OUT/'bill-buster-20-bills.zip'
  with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
-  for path in sorted((PUBLIC/'bills').glob('BB-*.pdf')):z.write(path,f'bill-buster-20-bills/bills/{path.name}')
+  for case in cases:
+   path=PUBLIC/case['pdf'];z.write(path,f'bill-buster-20-bills/bills/{path.name}')
   for name in ['answer-key.json','answer-key.csv','README.txt']:z.write(PUBLIC/name,f'bill-buster-20-bills/{name}')
  shutil.copyfile(archive,PUBLIC/'bill-buster-20-bills.zip')
  print(f'Created {len(cases)} one-page bills; archive: {archive}')

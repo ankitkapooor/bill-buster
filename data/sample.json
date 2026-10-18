@@ -6,48 +6,39 @@
   "lines": [
     {
       "code": "99284",
-      "description": "Emergency visit",
+      "description": "Emergency department visit",
       "units": 1,
       "amount": 1850,
       "date": "2026-09-14",
       "modifiers": "",
-      "provider": "Keck facility"
+      "provider": "FAC-A"
     },
     {
       "code": "85025",
-      "description": "Blood count",
+      "description": "Blood count with differential",
       "units": 1,
       "amount": 212,
       "date": "2026-09-14",
       "modifiers": "",
-      "provider": "Keck facility"
-    },
-    {
-      "code": "36415",
-      "description": "Blood draw",
-      "units": 1,
-      "amount": 48,
-      "date": "2026-09-14",
-      "modifiers": "",
-      "provider": "Keck facility"
+      "provider": "FAC-A"
     },
     {
       "code": "85025",
-      "description": "Blood count",
+      "description": "Blood count with differential",
       "units": 1,
       "amount": 212,
       "date": "2026-09-14",
       "modifiers": "",
-      "provider": "Keck facility"
+      "provider": "FAC-A"
     },
     {
       "code": "80053",
-      "description": "Metabolic panel",
+      "description": "Comprehensive metabolic panel",
       "units": 2,
-      "amount": 240,
+      "amount": 480,
       "date": "2026-09-14",
       "modifiers": "",
-      "provider": "Keck facility"
+      "provider": "FAC-A"
     },
     {
       "code": "80048",
@@ -56,7 +47,34 @@
       "amount": 125,
       "date": "2026-09-14",
       "modifiers": "",
-      "provider": "Keck facility"
+      "provider": "FAC-A"
+    },
+    {
+      "code": "96360",
+      "description": "IV hydration, initial service",
+      "units": 1,
+      "amount": 640,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "FAC-A"
+    },
+    {
+      "code": "96374",
+      "description": "IV medication administration",
+      "units": 2,
+      "amount": 1180,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "FAC-A"
+    },
+    {
+      "code": "J2405",
+      "description": "Antiemetic supply, per unit",
+      "units": 4,
+      "amount": 76,
+      "date": "2026-09-14",
+      "modifiers": "",
+      "provider": "FAC-A"
     }
   ]
 }

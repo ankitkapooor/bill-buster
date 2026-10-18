@@ -3,6 +3,7 @@ import { getDocumentProxy } from 'unpdf';
 import sample from '../data/sample.json' with {type:'json'};
 import { BillError } from './engine.js';
 export const SAMPLE=sample;
+export {appealPDF,packetText} from './appeal-pdf.js';
 
 export async function pdfDocument(title, paragraphs, options={}) {
   const pdf=await PDFDocument.create(),font=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold);
